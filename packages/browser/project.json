@@ -1,0 +1,32 @@
+{
+  "name": "browser",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/browser/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "assets": [
+          {
+            "glob": "README.md",
+            "input": "packages/browser",
+            "output": "."
+          }
+        ],
+        "main": "packages/browser/src/index.ts",
+        "outputPath": "dist/packages/browser",
+        "tsConfig": "packages/browser/tsconfig.lib.json"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/ngx-firebase-web-authn-browser/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

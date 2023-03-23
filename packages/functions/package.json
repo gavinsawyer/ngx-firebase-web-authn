@@ -1,0 +1,19 @@
+{
+  "name": "@ngx-firebase-web-authn/functions",
+  "version": "15.0.4",
+  "author": {
+    "name": "Gavin Sawyer",
+    "email": "hello@gavinsawyer.dev",
+    "url": "https://github.com/gavinsawyer"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": "18"
+  },
+  "dependencies": {
+    "@simplewebauthn/server": "^7",
+    "firebase-admin": "^11",
+    "firebase-functions": "^4"
+  },
+  "private": false
+}

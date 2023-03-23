@@ -1,0 +1,16 @@
+{
+  "name": "@ngx-firebase-web-authn/browser",
+  "version": "15.0.4",
+  "author": {
+    "name": "Gavin Sawyer",
+    "email": "hello@gavinsawyer.dev",
+    "url": "https://github.com/gavinsawyer"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@angular/fire": "^7",
+    "@simplewebauthn/browser": "^7",
+    "@simplewebauthn/typescript-types": "^7"
+  },
+  "private": false
+}

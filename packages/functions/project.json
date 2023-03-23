@@ -1,0 +1,39 @@
+{
+  "name": "functions",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/functions/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "assets": [
+          {
+            "glob": "README.md",
+            "input": "packages/functions",
+            "output": "."
+          }
+        ],
+        "main": "packages/functions/src/index.ts",
+        "outputPath": "dist/packages/functions",
+        "tsConfig": "packages/functions/tsconfig.lib.json"
+      }
+    },
+    "deploy": {
+      "dependsOn": ["build"],
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "firebase deploy --only functions:ngx-firebase-web-authn"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/functions/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

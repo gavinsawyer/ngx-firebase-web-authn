@@ -1,0 +1,28 @@
+{
+  "name": "ngx-firebase-web-authn",
+  "version": "15.0.4",
+  "author": {
+    "name": "Gavin Sawyer",
+    "email": "hello@gavinsawyer.dev"
+  },
+  "scripts": {
+    "build": "npx nx run-many --all --target=build"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@nrwl/cli": "^15",
+    "@nrwl/eslint-plugin-nx": "^15",
+    "@nrwl/js": "^15",
+    "@nrwl/linter": "^15",
+    "@nrwl/nx-cloud": "^15",
+    "@nrwl/workspace": "^15",
+    "@types/node": "^18",
+    "@typescript-eslint/eslint-plugin": "^5",
+    "@typescript-eslint/parser": "^5",
+    "eslint": "^8",
+    "eslint-config-prettier": "^8",
+    "nx": "^15",
+    "prettier": "^2",
+    "typescript": "^4"
+  }
+}
