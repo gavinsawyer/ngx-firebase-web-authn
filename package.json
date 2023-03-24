@@ -1,6 +1,6 @@
 {
   "name": "ngx-firebase-web-authn",
-  "version": "15.0.6",
+  "version": "15.0.7",
   "author": {
     "name": "Gavin Sawyer",
     "email": "hello@gavinsawyer.dev",
@@ -29,7 +29,7 @@
     "firebase-admin": "^11",
     "firebase-functions": "^4",
     "nx": "^15",
-    "prettier": "^2",
+    "prettier": "~2.8.6",
     "typescript": "^4"
   }
 }
