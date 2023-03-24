@@ -1,7 +1,7 @@
 ## @ngx-firebase-web-authn/functions
 An Angular Firebase extension for authentication with WebAuthn passkeys.
 
-This package contains four Firebase Functions used to facilitate registering and authenticating WebAuthn passkeys. An additional function clears challenges if the user cancels the process.
+This package contains six Firebase Functions used to facilitate registering, authenticating, and reauthenticating WebAuthn passkeys. An additional function clears challenges if the user cancels the process.
 
 Functions store users' public keys in the `ngxFirebaseWebAuthnUsers` collection in Firestore. Setup doesn't require you to modify any Firestore rules. Your app should use a separate `users`/`profiles` collection to store user information.
 ### Deploying functions w/ existing Firebase Functions directory
@@ -54,7 +54,7 @@ Add the following object to the `functions` array in your `firebase.json`.
   ]
 }
 ```
-Run `npm install` inside `libs/ngx-firebase-web-authn-functions`
+Run `npm install` inside `libs/ngx-firebase-web-authn-functions`.
 
 Run the `deploy` target in your workspace root:
 
@@ -78,12 +78,20 @@ For the browser to reach your functions, modify your `firebase.json` to add the 
           "function": "ngxFirebaseWebAuthnCreateAuthenticationChallenge"
         },
         {
+          "source": "/ngxFirebaseWebAuthn/createReauthenticationChallenge",
+          "function": "ngxFirebaseWebAuthnCreateReauthenticationChallenge"
+        },
+        {
           "source": "/ngxFirebaseWebAuthn/createRegistrationChallenge",
           "function": "ngxFirebaseWebAuthnCreateRegistrationChallenge"
         },
         {
           "source": "/ngxFirebaseWebAuthn/verifyAuthentication",
           "function": "ngxFirebaseWebAuthnVerifyAuthentication"
+        },
+        {
+          "source": "/ngxFirebaseWebAuthn/verifyReauthentication",
+          "function": "ngxFirebaseWebAuthnVerifyReauthentication"
         },
         {
           "source": "/ngxFirebaseWebAuthn/verifyRegistration",
@@ -97,4 +105,4 @@ For the browser to reach your functions, modify your `firebase.json` to add the 
 ### Google Cloud setup
 Assign the Default Compute Service Account the `Service Account Token Creator` role in [GCP IAM Service accounts](https://console.cloud.google.com/iam-admin/serviceaccounts). This is required for all custom authentication patterns with Firebase.
 
-You also need to assign the `allUsers` principal the `Cloud Function Invoker` role on each Cloud Function.
+Assign the `allUsers` principal the `Cloud Function Invoker` role on each Cloud Function.
