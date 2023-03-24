@@ -1,6 +1,6 @@
 {
   "name": "ngx-firebase-web-authn",
-  "version": "15.0.4",
+  "version": "15.0.5",
   "author": {
     "name": "Gavin Sawyer",
     "email": "hello@gavinsawyer.dev"
@@ -10,17 +10,23 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@angular/fire": "^7",
     "@nrwl/cli": "^15",
     "@nrwl/eslint-plugin-nx": "^15",
     "@nrwl/js": "^15",
     "@nrwl/linter": "^15",
     "@nrwl/nx-cloud": "^15",
     "@nrwl/workspace": "^15",
+    "@simplewebauthn/browser": "^7",
+    "@simplewebauthn/server": "^7",
+    "@simplewebauthn/typescript-types": "^7",
     "@types/node": "^18",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "eslint": "^8",
     "eslint-config-prettier": "^8",
+    "firebase-admin": "^11",
+    "firebase-functions": "^4",
     "nx": "^15",
     "prettier": "^2",
     "typescript": "^4"
