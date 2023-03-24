@@ -5,7 +5,7 @@ An Angular Firebase extension for authentication with WebAuthn passkeys.
 #### Exported methods
 For the moment these should only be used when a user is not signed in or is signed in anonymously. Users are signed in anonymously first, which may make data disappear before the passkey window appears and is completed.
 
-Also note that displayName is not stored except in the passkey, and can be changed by the user. Once users are signed in, your app should create an entry in a separate `users`/`profiles` collection to store user information 
+Also note that `displayName` is not stored except in the passkey, and can be changed by the user. Once users are signed in, your app should create an entry in a separate `users`/`profiles` collection to store user information 
 ```ts
 createUserWithPasskey: (auth: Auth, functions: Functions, displayName: string) => Promise<UserCredential>;
 signInWithPasskey: (auth: Auth, functions: Functions) => Promise<UserCredential>;
@@ -31,12 +31,12 @@ export class SignUpComponent {
     // ngxFirebaseWebAuthn usage
     this
       .createUserWithPasskey = (displayName: string): Promise<void> => createUserWithPasskey(auth, functions, displayName)
-      .then<void>((_userCredential: UserCredential): void => void(0));
+      .then<void>((_userCredential: UserCredential): void => void(0) /* Sign-up complete */);
     
     // AngularFire usage
     this
       .createUserWithEmailAndPassword = (email: string, password: string): Promise<void> => createUserWithEmailAndPassword(auth, email, password)
-      .then<void>((_userCredential: UserCredential): void => void(0));
+      .then<void>((_userCredential: UserCredential): void => void(0) /* Sign-up complete */);
   }
 
   public readonly createUserWithPasskey: (displayName: string) => Promise<void>;
@@ -47,7 +47,7 @@ export class SignUpComponent {
 ### [@ngx-firebase-web-authn/functions](packages/functions)
 This package contains four Firebase Functions used to facilitate registering and authenticating WebAuthn passkeys. An additional function clears challenges if the user cancels the process.
 
-Functions store users' public keys in the `ngxFirebaseWebAuthnUsers` collection in Firestore. Setup doesn't require you to modify Firestore any rules. Your app should use a separate `users`/`profiles` collection to store user information.
+Functions store users' public keys in the `ngxFirebaseWebAuthnUsers` collection in Firestore. Setup doesn't require you to modify any Firestore rules. Your app should use a separate `users`/`profiles` collection to store user information.
 ### Deploying functions w/ existing Firebase Functions directory
 From your functions directory root, run:
 

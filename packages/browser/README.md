@@ -4,7 +4,7 @@ An Angular Firebase extension for authentication with WebAuthn passkeys.
 #### Exported methods
 For the moment these should only be used when a user is not signed in or is signed in anonymously. Users are signed in anonymously first, which may make data disappear before the passkey window appears and is completed.
 
-Also note that displayName is not stored except in the passkey, and can be changed by the user. Once users are signed in, your app should create an entry in a separate `users`/`profiles` collection to store user information
+Also note that `displayName` is not stored except in the passkey, and can be changed by the user. Once users are signed in, your app should create an entry in a separate `users`/`profiles` collection to store user information
 
 ```ts
 createUserWithPasskey: (auth: Auth, functions: Functions, displayName: string) => Promise<UserCredential>;

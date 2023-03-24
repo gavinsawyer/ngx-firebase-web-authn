@@ -3,7 +3,7 @@ An Angular Firebase extension for authentication with WebAuthn passkeys.
 
 This package contains four Firebase Functions used to facilitate registering and authenticating WebAuthn passkeys. An additional function clears challenges if the user cancels the process.
 
-Functions store users' public keys in the `ngxFirebaseWebAuthnUsers` collection in Firestore. Setup doesn't require you to modify Firestore any rules. Your app should use a separate `users`/`profiles` collection to store user information.
+Functions store users' public keys in the `ngxFirebaseWebAuthnUsers` collection in Firestore. Setup doesn't require you to modify any Firestore rules. Your app should use a separate `users`/`profiles` collection to store user information.
 ### Deploying functions w/ existing Firebase Functions directory
 From your functions directory root, run:
 
