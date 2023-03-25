@@ -1,9 +1,24 @@
-<mat-card>
+<mat-card *ngIf="(authenticationService.userObservable | async) !== null && !(authenticationService.userObservable | async)?.isAnonymous">
   <mat-card-content>
-    You're logged in as xyz.
+    You're signed in as {{ (authenticationService.userObservable | async)?.uid }}.
   </mat-card-content>
+  <mat-card-actions align="end">
+    <button
+      (click)="signInAnonymously();"
+      color="primary"
+      mat-button="">
+      Sign out
+    </button>
+  </mat-card-actions>
 </mat-card>
-<mat-card>
+<button
+  (click)="confirmUserWithPasskey();"
+  color="primary"
+  mat-raised-button=""
+  *ngIf="(authenticationService.userObservable | async) !== null && !(authenticationService.userObservable | async)?.isAnonymous">
+  Confirm with passkey
+</button>
+<mat-card *ngIf="(authenticationService.userObservable | async)?.isAnonymous">
   <mat-card-header>
     <mat-card-title>
       Create an account
@@ -13,7 +28,7 @@
     <form
       [formGroup]="formGroup"
       (ngSubmit)="submit();">
-      <mat-form-field appearance="outline">
+      <mat-form-field>
         <mat-label>
           Name
         </mat-label>
@@ -33,8 +48,13 @@
   <mat-card-actions align="end">
     <button
       color="primary"
+      mat-button="">
+      Use a random name
+    </button>
+    <button
+      color="primary"
       [disabled]="formGroup.invalid"
-      mat-mini-fab=""
+      mat-icon-button=""
       type="submit">
       <mat-icon>
         arrow_forward
@@ -45,6 +65,7 @@
 <button
   (click)="signInWithPasskey();"
   color="primary"
-  mat-raised-button="">
+  mat-raised-button=""
+  *ngIf="(authenticationService.userObservable | async)?.isAnonymous">
   Sign in with passkey
 </button>
