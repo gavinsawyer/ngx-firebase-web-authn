@@ -19,16 +19,12 @@ jobs:
         with:
           path: node_modules
           key: node-modules-cache-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            node-modules-cache-
       - if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm ci
       - run: npm i @nrwl/nx-linux-x64-gnu@^15
-      - run: npx nx run functions:build
-      - run: npm publish dist/packages/functions
+      - run: npx nx run-many --target build --projects functions,browser
         env:
-          NPM_ACCESS_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
-      - run: npx nx run browser:build
-      - run: npm publish dist/packages/browser
+          NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
+      - run: npm publish dist/packages/functions && npm publish dist/packages/browser
         env:
           NPM_ACCESS_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
