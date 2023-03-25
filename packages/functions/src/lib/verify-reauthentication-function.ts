@@ -31,7 +31,9 @@ export const ngxFirebaseWebAuthnVerifyReauthentication: HttpsFunction = runWith(
   })) : ((_writeResult): VerifyReauthenticationFunctionResponse => ({
     success: false,
     message: "Reauthentication response not verified.",
-  }))(await firestore.collection("ngxFirebaseWebAuthnUsers").doc(callableContext.auth!.uid).delete()))(await verifyAuthenticationResponse({
+  }))(await (firestore.collection("ngxFirebaseWebAuthnUsers").doc(callableContext.auth!.uid) as DocumentReference<UserDocument>).update({
+    challenge: FieldValue.delete(),
+  })))(await verifyAuthenticationResponse({
     authenticator: {
       counter: userDocument.credentialCounter!,
       credentialID: userDocument.credentialId!,
