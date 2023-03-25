@@ -1,7 +1,7 @@
 {
   "name": "browser",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/browser/src",
+  "sourceRoot": "../browser/src",
   "projectType": "library",
   "targets": {
     "build": {
@@ -11,20 +11,20 @@
         "assets": [
           {
             "glob": "README.md",
-            "input": "packages/browser",
+            "input": "libs/browser",
             "output": "."
           }
         ],
-        "main": "packages/browser/src/index.ts",
-        "outputPath": "dist/packages/browser",
-        "tsConfig": "packages/browser/tsconfig.lib.json"
+        "main": "libs/browser/src/index.ts",
+        "outputPath": "dist/libs/browser",
+        "tsConfig": "libs/browser/tsconfig.lib.json"
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/ngx-firebase-web-authn-browser/**/*.ts"]
+        "lintFilePatterns": ["libs/ngx-firebase-web-authn-browser/**/*.ts"]
       }
     }
   },

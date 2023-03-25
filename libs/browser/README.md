@@ -7,7 +7,7 @@ createUserWithPasskey: (auth: Auth, functions: Functions, displayName: string) =
 signInWithPasskey: (auth: Auth, functions: Functions) => Promise<UserCredential>;
 confirmUserWithPasskey: (auth: Auth, functions: Functions) => Promise<void>;
 ```
-For the moment these should only be used when a user is not signed in or is signed in anonymously. Users are signed in anonymously first, which may make data disappear before the passkey window appears and is completed.
+`createUserWithPasskey` and `signInWithPasskey` should only be used when a user is not signed in or is signed in anonymously. Users are signed in anonymously first, which may make data disappear before the passkey window appears and is completed.
 
 Also note that `displayName` is not stored except in the passkey, and can be changed by the user. Once users are signed in, your app should create a document in a separate `users`/`profiles` collection to store user information.
 

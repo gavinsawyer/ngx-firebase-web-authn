@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /
+
+Sitemap: https://ngx-firebase-web-authn.web.app/sitemap.xml

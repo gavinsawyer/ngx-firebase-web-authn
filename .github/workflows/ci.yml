@@ -22,9 +22,15 @@ jobs:
       - if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm ci
       - run: npm i @nrwl/nx-linux-x64-gnu@^15
-      - run: npx nx run-many --target build --projects functions,browser
+      - run: npx nx run-many --target build --all
         env:
           NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
-      - run: npm publish dist/packages/functions && npm publish dist/packages/browser
+      - run: npm publish dist/libs/functions && npm publish dist/libs/browser
         env:
           NPM_ACCESS_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_NGX_FIREBASE_WEB_AUTHN }}'
+          channelId: live
+          projectId: ngx-firebase-web-authn

@@ -1,14 +1,14 @@
 # ngx-firebase-web-authn
 #### `AngularFire` `Firebase Authentication` `Firebase Functions` `Firestore` `SimpleWebAuthn`
 An Angular Firebase extension for authentication with WebAuthn passkeys.
-### [@ngx-firebase-web-authn/browser](packages/browser)
+### [@ngx-firebase-web-authn/browser](libs/browser)
 #### Exported methods
 ```ts
 createUserWithPasskey: (auth: Auth, functions: Functions, displayName: string) => Promise<UserCredential>;
 signInWithPasskey: (auth: Auth, functions: Functions) => Promise<UserCredential>;
 confirmUserWithPasskey: (auth: Auth, functions: Functions) => Promise<void>;
 ```
-For the moment these should only be used when a user is not signed in or is signed in anonymously. Users are signed in anonymously first, which may make data disappear before the passkey window appears and is completed.
+`createUserWithPasskey` and `signInWithPasskey` should only be used when a user is not signed in or is signed in anonymously. Users are signed in anonymously first, which may make data disappear before the passkey window appears and is completed.
 
 Also note that `displayName` is not stored except in the passkey, and can be changed by the user. Once users are signed in, your app should create a document in a separate `users`/`profiles` collection to store user information.
 
@@ -47,7 +47,7 @@ export class SignUpComponent {
 }
 ```
 Add `.catch<void>((reason: any): void => console.error(reason))` to these methods for an error code that may point to one of your Firebase Functions. If the user cancels `createUserWithPasskey`, the method throws `"ngxFirebaseWebAuthn/createUserWithPasskey: Cancelled by user."`, for example.
-### [@ngx-firebase-web-authn/functions](packages/functions)
+### [@ngx-firebase-web-authn/functions](libs/functions)
 This package contains six Firebase Functions used to facilitate registering, authenticating, and reauthenticating WebAuthn passkeys. An additional function clears challenges if the user cancels the process.
 
 Functions store users' public keys in the `ngxFirebaseWebAuthnUsers` collection in Firestore. Setup doesn't require you to modify any Firestore rules. Your app should use a separate `users`/`profiles` collection to store user information.

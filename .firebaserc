@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "ngx-firebase-web-authn"
+  },
+  "targets": {
+    "ngx-firebase-web-authn": {
+      "hosting": {
+        "demo": [
+          "ngx-firebase-web-authn"
+        ]
+      }
+    }
+  }
+}

@@ -15,8 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@ngx-firebase-web-authn/browser": ["packages/browser/src/index.ts"],
-      "@ngx-firebase-web-authn/functions": ["packages/functions/src/index.ts"]
+      "@ngx-firebase-web-authn/browser": ["libs/browser/src/index.ts"],
+      "@ngx-firebase-web-authn/functions": ["libs/functions/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp", "**/README.md"]
