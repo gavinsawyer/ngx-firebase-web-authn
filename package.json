@@ -1,13 +1,10 @@
 {
   "name": "ngx-firebase-web-authn",
-  "version": "15.1.1",
+  "version": "15.1.2",
   "author": {
     "name": "Gavin Sawyer",
     "email": "hello@gavinsawyer.dev",
     "url": "https://github.com/gavinsawyer"
-  },
-  "scripts": {
-    "build": "npx nx run-many --all --target=build"
   },
   "license": "MIT",
   "devDependencies": {

@@ -24,7 +24,11 @@ jobs:
       - if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm ci
       - run: npm i @nrwl/nx-linux-x64-gnu@^15
-      - run: npm run build
-      - run: npm publish dist/packages/browser && npm publish dist/packages/functions
+      - run: npx nx run functions:build
+      - run: npm publish dist/packages/functions
+        env:
+          NPM_ACCESS_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
+      - run: npx nx run browser:build
+      - run: npm publish dist/packages/browser
         env:
           NPM_ACCESS_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
