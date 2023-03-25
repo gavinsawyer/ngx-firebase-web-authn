@@ -6,7 +6,9 @@ import { Auth, getAuth, provideAuth }                     from "@angular/fire/au
 import { Firestore, getFirestore, provideFirestore }      from "@angular/fire/firestore";
 import { Functions, getFunctions, provideFunctions }      from "@angular/fire/functions";
 import { ReactiveFormsModule }                            from "@angular/forms";
+import { MatToolbarModule }                               from "@angular/material/toolbar";
 import { BrowserModule }                                  from "@angular/platform-browser";
+import { BrowserAnimationsModule }                        from "@angular/platform-browser/animations";
 import { RouterModule }                                   from "@angular/router";
 import { TransferHttpCacheModule }                        from "@nguniversal/common";
 import { AppCheckOptionsService }                         from "./services";
@@ -19,9 +21,11 @@ const baseTitle = "ngxFirebaseWebAuthn Demo";
 @NgModule({
   declarations: [AppComponent],
   imports: [
+    BrowserAnimationsModule,
     BrowserModule.withServerTransition({
       appId: "serverApp",
     }),
+    MatToolbarModule,
     provideAppCheck((injector: Injector): AppCheck => initializeAppCheck(undefined, injector.get(AppCheckOptionsService).appCheckOptions(environment.recaptchaSiteKey))),
     provideAuth((): Auth => getAuth()),
     provideFirebaseApp((): FirebaseApp => initializeApp(environment.firebase)),

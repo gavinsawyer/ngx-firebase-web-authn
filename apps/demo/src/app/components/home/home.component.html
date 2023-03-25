@@ -1,1 +1,50 @@
-Home
+<mat-card>
+  <mat-card-content>
+    You're logged in as xyz.
+  </mat-card-content>
+</mat-card>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      Create an account
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form
+      [formGroup]="formGroup"
+      (ngSubmit)="submit();">
+      <mat-form-field appearance="outline">
+        <mat-label>
+          Name
+        </mat-label>
+        <input
+          autocapitalize="words"
+          autocomplete="name"
+          formControlName="displayName"
+          matInput=""
+          [required]="true"
+          type="text">
+        <mat-error *ngIf="formGroup.controls.displayName?.hasError('required')">
+          This is required.
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+  <mat-card-actions align="end">
+    <button
+      color="primary"
+      [disabled]="formGroup.invalid"
+      mat-mini-fab=""
+      type="submit">
+      <mat-icon>
+        arrow_forward
+      </mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>
+<button
+  (click)="signInWithPasskey();"
+  color="primary"
+  mat-raised-button="">
+  Sign in with passkey
+</button>
