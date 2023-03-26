@@ -40,8 +40,8 @@ export const ngxFirebaseWebAuthnVerifyReauthentication: HttpsFunction = runWith(
       credentialPublicKey: userDocument.credentialPublicKey!,
     },
     expectedChallenge: userDocument.challenge,
-    expectedOrigin: "https://console.gavinsawyer.dev",
-    expectedRPID: "console.gavinsawyer.dev",
+    expectedOrigin: "https://" + callableContext.rawRequest.hostname,
+    expectedRPID: callableContext.rawRequest.hostname,
     requireUserVerification: true,
     response: verifyReauthenticationFunctionRequest.authenticationResponse,
   })) : {

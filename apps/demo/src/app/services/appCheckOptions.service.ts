@@ -13,7 +13,7 @@ export class AppCheckOptionsService {
     private readonly platformId: object,
   ) {
     this
-      .appCheckOptions = (recaptchaSiteKey: string) => isPlatformBrowser(platformId) ? {
+      .appCheckOptions = (recaptchaSiteKey: string): AppCheckOptions => isPlatformBrowser(platformId) ? {
         isTokenAutoRefreshEnabled: true,
         provider: new ReCaptchaV3Provider(recaptchaSiteKey),
       } : {

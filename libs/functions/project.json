@@ -1,7 +1,7 @@
 {
   "name": "functions",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "../functions/src",
+  "sourceRoot": "libs/functions/src",
   "projectType": "library",
   "targets": {
     "build": {
@@ -18,13 +18,6 @@
         "main": "libs/functions/src/index.ts",
         "outputPath": "dist/libs/functions",
         "tsConfig": "libs/functions/tsconfig.lib.json"
-      }
-    },
-    "deploy": {
-      "dependsOn": ["build"],
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "firebase deploy --only functions:ngx-firebase-web-authn"
       }
     },
     "lint": {

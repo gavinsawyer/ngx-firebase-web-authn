@@ -36,7 +36,7 @@ export const ngxFirebaseWebAuthnCreateReauthenticationChallenge: HttpsFunction =
         type: "public-key",
       },
     ],
-    rpID: "console.gavinsawyer.dev",
+    rpID: callableContext.rawRequest.hostname,
     userVerification: "required",
   })) : {
     success: false,

@@ -1,7 +1,7 @@
-import { isPlatformBrowser }                                              from "@angular/common";
-import { Inject, Injectable, OnDestroy, PLATFORM_ID }                     from "@angular/core";
-import { Auth, onAuthStateChanged, signInAnonymously, Unsubscribe, User } from "@angular/fire/auth";
-import { Observable, shareReplay, Subject }                               from "rxjs";
+import { isPlatformBrowser }                                            from "@angular/common";
+import { Inject, Injectable, OnDestroy, PLATFORM_ID }                   from "@angular/core";
+import { Auth, onIdTokenChanged, signInAnonymously, Unsubscribe, User } from "@angular/fire/auth";
+import { Observable, shareReplay, Subject }                             from "rxjs";
 
 
 @Injectable({
@@ -16,11 +16,11 @@ export class AuthenticationService implements OnDestroy {
     private readonly auth: Auth,
   ) {
     this
-      .unsubscribeAuthStateChanged = onAuthStateChanged(auth, ((user: User | null): void => {
+      .unsubscribeIdTokenChanged = onIdTokenChanged(auth, ((user: User | null): void => {
         user ? this
           .userSubject
           .next(user) : isPlatformBrowser(platformId) && signInAnonymously(auth)
-          .catch((reason: any): void => console.error(reason));
+          .catch<void>((reason: any): void => console.error(reason));
       }));
     this
       .userSubject = new Subject<User>();
@@ -29,21 +29,21 @@ export class AuthenticationService implements OnDestroy {
       .userSubject
       .asObservable()
       .pipe<User>(
-        shareReplay<User>()
+        shareReplay<User>(1),
       );
 
     isPlatformBrowser(platformId) || this
-      .unsubscribeAuthStateChanged();
+      .unsubscribeIdTokenChanged();
   }
 
-  private readonly unsubscribeAuthStateChanged: Unsubscribe;
+  private readonly unsubscribeIdTokenChanged: Unsubscribe;
   private readonly userSubject: Subject<User>;
 
   public readonly userObservable: Observable<User>;
 
   ngOnDestroy(): void {
     this
-      .unsubscribeAuthStateChanged();
+      .unsubscribeIdTokenChanged();
   }
 
 }

@@ -37,8 +37,8 @@ export const ngxFirebaseWebAuthnVerifyRegistration: HttpsFunction = runWith({
     message: "Registration response not verified.",
   }))(await firestore.collection("ngxFirebaseWebAuthnUsers").doc(callableContext.auth!.uid).delete()))(await verifyRegistrationResponse({
     expectedChallenge: userDocument["challenge"],
-    expectedOrigin: "https://console.gavinsawyer.dev",
-    expectedRPID: "console.gavinsawyer.dev",
+    expectedOrigin: "https://" + callableContext.rawRequest.hostname,
+    expectedRPID: callableContext.rawRequest.hostname,
     requireUserVerification: true,
     response: verifyRegistrationFunctionRequest.registrationResponse,
   })) : ((_writeResult): VerifyRegistrationFunctionResponse => ({

@@ -1,7 +1,7 @@
 {
   "name": "browser",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "../browser/src",
+  "sourceRoot": "libs/browser/src",
   "projectType": "library",
   "targets": {
     "build": {

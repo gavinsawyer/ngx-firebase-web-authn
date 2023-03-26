@@ -5,7 +5,7 @@ import { startRegistration }                                                    
 import { RegistrationResponseJSON }                                                                                                                                                                       from "@simplewebauthn/typescript-types";
 
 
-export const createUserWithPasskey: (auth: Auth, functions: Functions, displayName: string) => Promise<UserCredential> = async (auth: Auth, functions: Functions, displayName: string): Promise<UserCredential> => (async (_userCredential: UserCredential): Promise<UserCredential> => (async (createRegistrationChallengeFunctionResponse: CreateRegistrationChallengeFunctionResponse): Promise<UserCredential> => ("message" in createRegistrationChallengeFunctionResponse && createRegistrationChallengeFunctionResponse.message) ? ((): never => {
+export const createUserWithPasskey: (auth: Auth, functions: Functions, name: string) => Promise<UserCredential> = async (auth: Auth, functions: Functions, name: string): Promise<UserCredential> => (async (_userCredential: UserCredential): Promise<UserCredential> => (async (createRegistrationChallengeFunctionResponse: CreateRegistrationChallengeFunctionResponse): Promise<UserCredential> => ("message" in createRegistrationChallengeFunctionResponse && createRegistrationChallengeFunctionResponse.message) ? ((): never => {
   throw new Error("ngxFirebaseWebAuthn/createRegistrationChallengeFunction: " + createRegistrationChallengeFunctionResponse.message);
 })() : (async (): Promise<UserCredential> => "creationOptions" in createRegistrationChallengeFunctionResponse ? (async (registrationResponse: RegistrationResponseJSON): Promise<UserCredential> => (async (verifyRegistrationFunctionResponse: VerifyRegistrationFunctionResponse): Promise<UserCredential> => ("message" in verifyRegistrationFunctionResponse && verifyRegistrationFunctionResponse.message) ? ((): never => {
   throw new Error("ngxFirebaseWebAuthn/verifyRegistrationFunction: " + verifyRegistrationFunctionResponse.message);
@@ -20,5 +20,5 @@ export const createUserWithPasskey: (auth: Auth, functions: Functions, displayNa
 })())((await httpsCallableFromURL<null, ClearChallengeFunctionResponse>(functions, "/ngxFirebaseWebAuthn/clearChallenge")()).data))) : ((): never => {
   throw new Error("ngxFirebaseWebAuthn/createRegistrationChallengeFunction: Invalid response.");
 })())())((await httpsCallableFromURL<CreateRegistrationChallengeFunctionRequest, CreateRegistrationChallengeFunctionResponse>(functions, "/ngxFirebaseWebAuthn/createRegistrationChallenge")({
-  displayName: displayName,
+  name: name,
 })).data))(await signInAnonymously(auth));

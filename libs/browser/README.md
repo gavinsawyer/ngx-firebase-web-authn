@@ -1,6 +1,7 @@
 ## @ngx-firebase-web-authn/browser
 An Angular Firebase extension for authentication with WebAuthn passkeys.
 
+See the demo online at https://ngx-firebase-web-authn.web.app.
 #### Exported methods
 ```ts
 createUserWithPasskey: (auth: Auth, functions: Functions, displayName: string) => Promise<UserCredential>;
@@ -9,7 +10,7 @@ confirmUserWithPasskey: (auth: Auth, functions: Functions) => Promise<void>;
 ```
 `createUserWithPasskey` and `signInWithPasskey` should only be used when a user is not signed in or is signed in anonymously. Users are signed in anonymously first, which may make data disappear before the passkey window appears and is completed.
 
-Also note that `displayName` is not stored except in the passkey, and can be changed by the user. Once users are signed in, your app should create a document in a separate `users`/`profiles` collection to store user information.
+Also note that `name` is not stored except in the passkey, and can be changed by the user without the app being able to know. Once users are signed in, your app should create a document in a separate `users`/`profiles` collection to store user information.
 
 Designed to be used just like native Firebase Authentication providers:
 ```ts
@@ -31,7 +32,7 @@ export class SignUpComponent {
   ) {
     // ngxFirebaseWebAuthn usage
     this
-      .createUserWithPasskey = (displayName: string): Promise<void> => createUserWithPasskey(auth, functions, displayName)
+      .createUserWithPasskey = (name: string): Promise<void> => createUserWithPasskey(auth, functions, name)
       .then<void>((_userCredential: UserCredential): void => void(0));
     
     // AngularFire usage
@@ -40,7 +41,7 @@ export class SignUpComponent {
       .then<void>((_userCredential: UserCredential): void => void(0));
   }
 
-  public readonly createUserWithPasskey: (displayName: string) => Promise<void>;
+  public readonly createUserWithPasskey: (name: string) => Promise<void>;
   public readonly createUserWithEmailAndPassword: (email: string, password: string) => Promise<void>;
 
 }

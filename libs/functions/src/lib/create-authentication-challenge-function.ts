@@ -30,7 +30,7 @@ export const ngxFirebaseWebAuthnCreateAuthenticationChallenge: HttpsFunction = r
   }, {
     merge: true,
   })))(generateAuthenticationOptions({
-    rpID: "console.gavinsawyer.dev",
+    rpID: callableContext.rawRequest.hostname,
     userVerification: "required",
   })))(getAuth(), getFirestore()) : {
     success: false,

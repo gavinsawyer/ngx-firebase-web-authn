@@ -16,7 +16,7 @@ interface CreateRegistrationChallengeFunctionResponseUnsuccessful extends Functi
 }
 
 export interface CreateRegistrationChallengeFunctionRequest {
-  "displayName": string,
+  "name": string,
 }
 export type CreateRegistrationChallengeFunctionResponse = CreateRegistrationChallengeFunctionResponseSuccessful | CreateRegistrationChallengeFunctionResponseUnsuccessful;
 
@@ -34,10 +34,10 @@ export const ngxFirebaseWebAuthnCreateRegistrationChallenge: HttpsFunction = run
       residentKey: "required",
       userVerification: "required",
     },
-    rpID: "console.gavinsawyer.dev",
-    rpName: "GavinSawyer.dev Console",
+    rpID: callableContext.rawRequest.hostname,
+    rpName: callableContext.rawRequest.hostname,
     userID: callableContext.auth!.uid,
-    userName: createRegistrationChallengeFunctionRequest.displayName,
+    userName: createRegistrationChallengeFunctionRequest.name,
   })) : {
     success: false,
     message: "A passkey already exists for this user.",

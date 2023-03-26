@@ -1,16 +1,18 @@
 # ngx-firebase-web-authn
 #### `AngularFire` `Firebase Authentication` `Firebase Functions` `Firestore` `SimpleWebAuthn`
 An Angular Firebase extension for authentication with WebAuthn passkeys.
+
+See the demo online at https://ngx-firebase-web-authn.web.app.
 ### [@ngx-firebase-web-authn/browser](libs/browser)
 #### Exported methods
 ```ts
-createUserWithPasskey: (auth: Auth, functions: Functions, displayName: string) => Promise<UserCredential>;
+createUserWithPasskey: (auth: Auth, functions: Functions, name: string) => Promise<UserCredential>;
 signInWithPasskey: (auth: Auth, functions: Functions) => Promise<UserCredential>;
 confirmUserWithPasskey: (auth: Auth, functions: Functions) => Promise<void>;
 ```
 `createUserWithPasskey` and `signInWithPasskey` should only be used when a user is not signed in or is signed in anonymously. Users are signed in anonymously first, which may make data disappear before the passkey window appears and is completed.
 
-Also note that `displayName` is not stored except in the passkey, and can be changed by the user. Once users are signed in, your app should create a document in a separate `users`/`profiles` collection to store user information.
+Also note that `name` is not stored except in the passkey, and can be changed by the user without the app being able to know. Once users are signed in, your app should create a document in a separate `users`/`profiles` collection to store user information.
 
 Designed to be used just like native Firebase Authentication providers:
 ```ts
@@ -32,7 +34,7 @@ export class SignUpComponent {
   ) {
     // ngxFirebaseWebAuthn usage
     this
-      .createUserWithPasskey = (displayName: string): Promise<void> => createUserWithPasskey(auth, functions, displayName)
+      .createUserWithPasskey = (name: string): Promise<void> => createUserWithPasskey(auth, functions, name)
       .then<void>((_userCredential: UserCredential): void => void(0));
 
     // AngularFire usage
@@ -41,7 +43,7 @@ export class SignUpComponent {
       .then<void>((_userCredential: UserCredential): void => void(0));
   }
 
-  public readonly createUserWithPasskey: (displayName: string) => Promise<void>;
+  public readonly createUserWithPasskey: (name: string) => Promise<void>;
   public readonly createUserWithEmailAndPassword: (email: string, password: string) => Promise<void>;
 
 }
@@ -51,8 +53,8 @@ Add `.catch<void>((reason: any): void => console.error(reason))` to these method
 This package contains six Firebase Functions used to facilitate registering, authenticating, and reauthenticating WebAuthn passkeys. An additional function clears challenges if the user cancels the process.
 
 Functions store users' public keys in the `ngxFirebaseWebAuthnUsers` collection in Firestore. Setup doesn't require you to modify any Firestore rules. Your app should use a separate `users`/`profiles` collection to store user information.
-### Deploying functions w/ existing Firebase Functions directory
-From your functions directory root, run:
+### Deploying functions
+From your functions package root, run:
 
 `% npm install @ngx-firebase-web-authn/functions --save`
 
@@ -70,44 +72,6 @@ export * from '@ngx-firebase-web-authn/functions'
 Deploy your firebase functions.
 
 `% firebase deploy --only functions`
-### Deploying functions w/ Nx
-Copy this package to your Nx workspace as `libs/ngx-firebase-web-authn-functions`.
-
-Be sure to include the correct path in your `tsconfig.base.json`.
-```json
-{
-  "paths": {
-    "ngx-firebase-web-authn-functions": [
-      "libs/ngx-firebase-web-authn-functions/src/index.ts"
-    ]
-  }
-}
-```
-Add the following object to the `functions` array in your `firebase.json`.
-```json
-{
-  "functions": [
-    {
-      "codebase": "ngx-firebase-web-authn",
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log"
-      ],
-      "runtime": "nodejs18",
-      "source": "dist/libs/ngx-firebase-web-authn-functions"
-    }
-  ]
-}
-```
-Run `npm install` inside `libs/ngx-firebase-web-authn-functions`.
-
-Run the `deploy` target in your workspace root:
-
-`% npx nx run ngx-firebase-web-authn-functions:deploy`
-- Builds library with tsc, outputs to `dist/libs/ngx-firebase-web-authn-functions`.
-- Deploys `ngx-firebase-web-authn` codebase using the Firebase CLI.
 ### Using functions
 For the browser to reach your functions, modify your `firebase.json` to add the following `rewrites` to the `hosting` object of each app where you'd like to use ngxFirebaseWebAuthn.
 ```json
@@ -151,5 +115,3 @@ For the browser to reach your functions, modify your `firebase.json` to add the 
 ```
 ### Google Cloud setup
 Assign the Default Compute Service Account the `Service Account Token Creator` role in [GCP IAM Service accounts](https://console.cloud.google.com/iam-admin/serviceaccounts). This is required for all custom authentication patterns with Firebase.
-
-Assign the `allUsers` principal the `Cloud Function Invoker` role on each Cloud Function.
