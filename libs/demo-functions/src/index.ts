@@ -1,2 +1,2 @@
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-export * from '../../functions/src';
+export * from "../../functions/src";

@@ -3,4 +3,4 @@ import { initializeApp } from "firebase-admin/app";
 
 initializeApp();
 
-export * from './src/index';
+export * from "./src/index";

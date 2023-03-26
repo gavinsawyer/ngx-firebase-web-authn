@@ -1,19 +1,21 @@
-<mat-card>
-  <mat-card-content>
-    You're signed in as {{ (profileService.profileDocumentObservable | async)?.name }}.
-  </mat-card-content>
-  <mat-card-actions align="end">
-    <button
-      (click)="signInAnonymously();"
-      color="primary"
-      mat-button="">
-      Sign out
-    </button>
-  </mat-card-actions>
-</mat-card>
-<button
-  (click)="confirmUserWithPasskey();"
-  color="primary"
-  mat-raised-button="">
-  Confirm with passkey
-</button>
+<ng-container *ngIf="profileService.profileDocumentObservable | async as profileDocument">
+  <mat-card>
+    <mat-card-content>
+      You're signed in as {{ profileDocument.name }}.
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button
+        (click)="signInAnonymously();"
+        color="primary"
+        mat-button="">
+        Sign out
+      </button>
+    </mat-card-actions>
+  </mat-card>
+  <button
+    (click)="confirmUserWithPasskey();"
+    color="primary"
+    mat-raised-button="">
+    Confirm with passkey
+  </button>
+</ng-container>

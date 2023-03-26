@@ -19,11 +19,7 @@ export class PathService {
       .events
       .pipe<NavigationEnd, string, string>(
         filter<RouterEvent | NavigationStart | NavigationEnd | NavigationCancel | NavigationError | RoutesRecognized | GuardsCheckStart | GuardsCheckEnd | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd | Scroll | ResolveStart | ResolveEnd, NavigationEnd>((routerEvent: RouterEvent | NavigationStart | NavigationEnd | NavigationCancel | NavigationError | RoutesRecognized | GuardsCheckStart | GuardsCheckEnd | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd | Scroll | ResolveStart | ResolveEnd): routerEvent is NavigationEnd => routerEvent instanceof NavigationEnd),
-        map<NavigationEnd, string>((navigationEnd: NavigationEnd): string => {
-          console.log(navigationEnd);
-
-          return navigationEnd.url.split("?")[0];
-        }),
+        map<NavigationEnd, string>((navigationEnd: NavigationEnd): string => navigationEnd.url.split("?")[0]),
         shareReplay<string>(),
       );
   }
