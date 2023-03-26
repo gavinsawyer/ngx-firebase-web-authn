@@ -1,19 +1,19 @@
-import { Injector, NgModule }                             from "@angular/core";
-import { ScreenTrackingService, UserTrackingService }     from "@angular/fire/analytics";
-import { FirebaseApp, initializeApp, provideFirebaseApp } from "@angular/fire/app";
-import { AppCheck, initializeAppCheck, provideAppCheck }  from "@angular/fire/app-check";
-import { Auth, getAuth, provideAuth }                     from "@angular/fire/auth";
-import { Firestore, getFirestore, provideFirestore }      from "@angular/fire/firestore";
-import { Functions, getFunctions, provideFunctions }      from "@angular/fire/functions";
-import { ReactiveFormsModule }                            from "@angular/forms";
-import { MatToolbarModule }                               from "@angular/material/toolbar";
-import { BrowserModule }                                  from "@angular/platform-browser";
-import { BrowserAnimationsModule }                        from "@angular/platform-browser/animations";
-import { RouterModule }                                   from "@angular/router";
-import { TransferHttpCacheModule }                        from "@nguniversal/common";
-import { AppCheckOptionsService }                         from "./services";
-import { environment }                                    from "../environments/environment";
-import { AppComponent }                                   from "./app.component";
+import { Injector, NgModule }                                                                    from "@angular/core";
+import { Analytics, getAnalytics, provideAnalytics, ScreenTrackingService, UserTrackingService } from "@angular/fire/analytics";
+import { FirebaseApp, initializeApp, provideFirebaseApp }                                        from "@angular/fire/app";
+import { AppCheck, initializeAppCheck, provideAppCheck }                                         from "@angular/fire/app-check";
+import { Auth, getAuth, provideAuth }                                                            from "@angular/fire/auth";
+import { Firestore, getFirestore, provideFirestore }                                             from "@angular/fire/firestore";
+import { Functions, getFunctions, provideFunctions }                                             from "@angular/fire/functions";
+import { ReactiveFormsModule }                                                                   from "@angular/forms";
+import { MatToolbarModule }                                                                      from "@angular/material/toolbar";
+import { BrowserModule }                                                                         from "@angular/platform-browser";
+import { BrowserAnimationsModule }                                                               from "@angular/platform-browser/animations";
+import { RouterModule }                                                                          from "@angular/router";
+import { TransferHttpCacheModule }                                                               from "@nguniversal/common";
+import { AppCheckOptionsService }                                                                from "./services";
+import { environment }                                                                           from "../environments/environment";
+import { AppComponent }                                                                          from "./app.component";
 
 
 const baseTitle = "ngxFirebaseWebAuthn Demo";
@@ -26,6 +26,7 @@ const baseTitle = "ngxFirebaseWebAuthn Demo";
       appId: "serverApp",
     }),
     MatToolbarModule,
+    provideAnalytics((): Analytics => getAnalytics()),
     provideAppCheck((injector: Injector): AppCheck => initializeAppCheck(undefined, injector.get(AppCheckOptionsService).appCheckOptions(environment.recaptchaSiteKey))),
     provideAuth((): Auth => getAuth()),
     provideFirebaseApp((): FirebaseApp => initializeApp(environment.firebase)),

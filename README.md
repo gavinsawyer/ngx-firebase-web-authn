@@ -4,6 +4,7 @@ An Angular Firebase extension for authentication with WebAuthn passkeys.
 
 See the demo online at https://ngx-firebase-web-authn.web.app.
 ### [@ngx-firebase-web-authn/browser](libs/browser)
+`% npm install @ngx-firebase-web-authn/browser --save`
 #### Exported methods
 ```ts
 createUserWithPasskey: (auth: Auth, functions: Functions, name: string) => Promise<UserCredential>;
