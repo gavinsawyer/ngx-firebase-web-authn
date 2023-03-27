@@ -19,7 +19,7 @@ export class ProfileService {
       .profileDocumentObservable = authenticationService
       .userObservable
       .pipe<DocumentSnapshot<ProfileDocument>, ProfileDocument | undefined, ProfileDocument, ProfileDocument, ProfileDocument>(
-        mergeMap<User, Observable<DocumentSnapshot<ProfileDocument>>>((user: User): Observable<DocumentSnapshot<ProfileDocument>> => docSnapshots<ProfileDocument>(doc(firestore, "/profiles/" + user.uid) as DocumentReference<ProfileDocument>)),
+        mergeMap<User, Observable<DocumentSnapshot<ProfileDocument>>>((user: User): Observable<DocumentSnapshot<ProfileDocument>> => user.isAnonymous ? new Subject<DocumentSnapshot<ProfileDocument>>().asObservable() : docSnapshots<ProfileDocument>(doc(firestore, "/profiles/" + user.uid) as DocumentReference<ProfileDocument>)),
         map<DocumentSnapshot<ProfileDocument>, ProfileDocument | undefined>((profileDocumentSnapshot: DocumentSnapshot<ProfileDocument>): ProfileDocument | undefined => profileDocumentSnapshot.data()),
         filter<ProfileDocument | undefined, ProfileDocument>((profileDocument: ProfileDocument | undefined): profileDocument is ProfileDocument => !!profileDocument),
         retry<ProfileDocument>({
