@@ -1,4 +1,4 @@
-import { isPlatformBrowser }                                            from "@angular/common";
+import { isPlatformBrowser }                                                            from "@angular/common";
 import { Inject, Injectable, OnDestroy, PLATFORM_ID }                                   from "@angular/core";
 import { Auth, onIdTokenChanged, signInAnonymously, Unsubscribe, User, UserCredential } from "@angular/fire/auth";
 import { Observable, shareReplay, Subject }                                             from "rxjs";
@@ -16,7 +16,7 @@ export class AuthenticationService implements OnDestroy {
     private readonly auth: Auth,
   ) {
     this
-      .unsubscribeIdTokenChanged = onIdTokenChanged(auth, (async (user: User | null): Promise<void> => user ? this.userSubject.next(user) : isPlatformBrowser(platformId) ? signInAnonymously(auth).then<void>((_userCredential: UserCredential): void => void (0)).catch<void>((reason: any): void => console.error(reason)) : void(0)));
+      .unsubscribeIdTokenChanged = onIdTokenChanged(auth, async (user: User | null): Promise<void> => user ? this.userSubject.next(user) : isPlatformBrowser(platformId) ? signInAnonymously(auth).then<void>((_userCredential: UserCredential): void => void(0)).catch<void>((reason: any): void => console.error(reason)) : void(0));
     this
       .userSubject = new Subject<User>();
     this
@@ -27,8 +27,10 @@ export class AuthenticationService implements OnDestroy {
         shareReplay<User>(1),
       );
 
-    isPlatformBrowser(platformId) || this
-      .unsubscribeIdTokenChanged();
+    isPlatformBrowser(platformId) || ((): void => {
+      this
+        .unsubscribeIdTokenChanged();
+    })();
   }
 
   private readonly unsubscribeIdTokenChanged: Unsubscribe;

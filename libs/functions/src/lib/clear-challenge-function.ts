@@ -1,8 +1,8 @@
-import { DocumentReference, FieldValue, getFirestore } from "firebase-admin/firestore";
-import { HttpsFunction, runWith }                      from "firebase-functions";
-import { FunctionResponseSuccessful }                  from "./function-response-successful";
-import { FunctionResponseUnsuccessful }                from "./function-response-unsuccessful";
-import { UserDocument }                                from "./user-document";
+import { DocumentReference, FieldValue, Firestore, getFirestore, WriteResult } from "firebase-admin/firestore";
+import { HttpsFunction, runWith }                                              from "firebase-functions";
+import { FunctionResponseSuccessful }                                          from "./function-response-successful";
+import { FunctionResponseUnsuccessful }                                        from "./function-response-unsuccessful";
+import { UserDocument }                                                        from "./user-document";
 
 
 interface ClearChallengeFunctionResponseSuccessful extends FunctionResponseSuccessful {}
@@ -17,11 +17,11 @@ export const ngxFirebaseWebAuthnClearChallenge: HttpsFunction = runWith({
   enforceAppCheck: true,
 })
   .https
-  .onCall(async (_clearChallengeFunctionRequest: ClearChallengeFunctionRequest, callableContext): Promise<ClearChallengeFunctionResponse> => callableContext.auth ? (async (firestore): Promise<ClearChallengeFunctionResponse> => (async (userDocument: UserDocument | undefined): Promise<ClearChallengeFunctionResponse> => userDocument ? (async (): Promise<ClearChallengeFunctionResponse> => userDocument.credentialPublicKey ? ((_writeResult): ClearChallengeFunctionResponse => ({
+  .onCall(async (_clearChallengeFunctionRequest: ClearChallengeFunctionRequest, callableContext): Promise<ClearChallengeFunctionResponse> => callableContext.auth ? (async (firestore: Firestore): Promise<ClearChallengeFunctionResponse> => (async (userDocument: UserDocument | undefined): Promise<ClearChallengeFunctionResponse> => userDocument ? (async (): Promise<ClearChallengeFunctionResponse> => userDocument.credentialPublicKey ? ((_writeResult: WriteResult): ClearChallengeFunctionResponse => ({
     success: true,
   }))(await (firestore.collection("ngxFirebaseWebAuthnUsers").doc(callableContext.auth!.uid) as DocumentReference<UserDocument>).update({
     challenge: FieldValue.delete(),
-  })) : ((_writeResult): ClearChallengeFunctionResponse => ({
+  })) : ((_writeResult: WriteResult): ClearChallengeFunctionResponse => ({
     success: true,
   }))(await firestore.collection("ngxFirebaseWebAuthnUsers").doc(callableContext.auth!.uid).delete()))() : {
     success: false,

@@ -1,6 +1,6 @@
 {
   "name": "ngx-firebase-web-authn",
-  "version": "15.2.1",
+  "version": "15.3.0",
   "main": "./apps/demo/src/main.ts",
   "author": {
     "name": "Gavin Sawyer",

@@ -1,12 +1,12 @@
-import { CommonModule }                            from "@angular/common";
-import { Component }                               from "@angular/core";
-import { Auth, signInAnonymously, UserCredential } from "@angular/fire/auth";
-import { Functions }                               from "@angular/fire/functions";
-import { MatButtonModule }                         from "@angular/material/button";
-import { MatCardModule }                           from "@angular/material/card";
-import { MatSnackBar, MatSnackBarModule }          from "@angular/material/snack-bar";
-import { confirmUserWithPasskey }                  from "@ngx-firebase-web-authn/browser";
-import { ProfileService }                          from "../../services";
+import { CommonModule }                             from "@angular/common";
+import { Component }                                from "@angular/core";
+import { Auth, signInAnonymously, UserCredential }  from "@angular/fire/auth";
+import { Functions }                                from "@angular/fire/functions";
+import { MatButtonModule }                          from "@angular/material/button";
+import { MatCardModule }                            from "@angular/material/card";
+import { MatSnackBar, MatSnackBarModule }           from "@angular/material/snack-bar";
+import { signInWithPasskey, verifyUserWithPasskey } from "@ngx-firebase-web-authn/browser";
+import { ProfileService }                           from "../../services";
 
 
 @Component({
@@ -33,15 +33,20 @@ export class ProfileCardComponent {
     public readonly profileService: ProfileService,
   ) {
     this
-      .confirmUserWithPasskey = (): Promise<void> => confirmUserWithPasskey(auth, functions)
-      .then<void, void>((_void: void): void => matSnackBar.open("Reauthentication successful.", "Okay.") && void(0))
-      .catch<void>((reason: any): void => matSnackBar.open("Something went wrong", "Okay.") && console.error(reason));
+      .verifyUserWithPasskey = (): Promise<void> => verifyUserWithPasskey(auth, functions)
+      .then<void, void>((_void: void): void => matSnackBar.open("Verification successful.", "Okay") && void(0))
+      .catch<void>((reason: any): void => matSnackBar.open("Something went wrong.", "Okay") && console.error(reason));
     this
       .signInAnonymously = (): Promise<void> => signInAnonymously(auth)
       .then<void>((_userCredential: UserCredential): void => void(0));
+    this
+      .signInWithPasskey = (): Promise<void> => signInWithPasskey(auth, functions)
+      .then<void, void>((_userCredential: UserCredential): void => matSnackBar.open("Sign-in successful.", "Okay") && void(0))
+      .catch<void>((reason: any): void => matSnackBar.open("Something went wrong.", "Okay") && console.error(reason));
   }
 
-  public readonly confirmUserWithPasskey: () => Promise<void>;
+  public readonly verifyUserWithPasskey: () => Promise<void>;
   public readonly signInAnonymously: () => Promise<void>;
+  public readonly signInWithPasskey: () => Promise<void>;
 
 }

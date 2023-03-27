@@ -1,11 +1,11 @@
-import { generateAuthenticationOptions }         from "@simplewebauthn/server";
-import { PublicKeyCredentialRequestOptionsJSON } from "@simplewebauthn/typescript-types";
-import { getAuth }                               from "firebase-admin/auth";
-import { DocumentReference, getFirestore }       from "firebase-admin/firestore";
-import { HttpsFunction, runWith }                from "firebase-functions";
-import { FunctionResponseSuccessful }            from "./function-response-successful";
-import { FunctionResponseUnsuccessful }          from "./function-response-unsuccessful";
-import { UserDocument }                          from "./user-document";
+import { generateAuthenticationOptions }                           from "@simplewebauthn/server";
+import { PublicKeyCredentialRequestOptionsJSON }                   from "@simplewebauthn/typescript-types";
+import { Auth, getAuth }                                           from "firebase-admin/auth";
+import { DocumentReference, Firestore, getFirestore, WriteResult } from "firebase-admin/firestore";
+import { HttpsFunction, runWith }                                  from "firebase-functions";
+import { FunctionResponseSuccessful }                              from "./function-response-successful";
+import { FunctionResponseUnsuccessful }                            from "./function-response-unsuccessful";
+import { UserDocument }                                            from "./user-document";
 
 
 interface CreateAuthenticationChallengeFunctionResponseSuccessful extends FunctionResponseSuccessful {
@@ -22,7 +22,7 @@ export const ngxFirebaseWebAuthnCreateAuthenticationChallenge: HttpsFunction = r
   enforceAppCheck: true,
 })
   .https
-  .onCall(async (createAuthenticationChallengeFunctionRequest: CreateAuthenticationChallengeFunctionRequest, callableContext): Promise<CreateAuthenticationChallengeFunctionResponse> => callableContext.auth ? ((auth, firestore): Promise<CreateAuthenticationChallengeFunctionResponse> => (async (publicKeyCredentialRequestOptions: PublicKeyCredentialRequestOptionsJSON): Promise<CreateAuthenticationChallengeFunctionResponse> => ((_writeResult): CreateAuthenticationChallengeFunctionResponse => ({
+  .onCall(async (createAuthenticationChallengeFunctionRequest: CreateAuthenticationChallengeFunctionRequest, callableContext): Promise<CreateAuthenticationChallengeFunctionResponse> => callableContext.auth ? ((auth: Auth, firestore: Firestore): Promise<CreateAuthenticationChallengeFunctionResponse> => (async (publicKeyCredentialRequestOptions: PublicKeyCredentialRequestOptionsJSON): Promise<CreateAuthenticationChallengeFunctionResponse> => ((_writeResult: WriteResult): CreateAuthenticationChallengeFunctionResponse => ({
     success: true,
     requestOptions: publicKeyCredentialRequestOptions,
   }))(await (firestore.collection("ngxFirebaseWebAuthnUsers").doc(callableContext.auth!.uid) as DocumentReference<UserDocument>).set({

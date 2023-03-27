@@ -57,8 +57,8 @@ export class SignInCardComponent {
       });
     this
       .signInWithPasskey = (): Promise<void> => signInWithPasskey(auth, functions)
-      .then<void, void>((_userCredential: UserCredential): void => matSnackBar.open("Authentication successful.", "Okay.") && void(0))
-      .catch<void>((reason: any): void => matSnackBar.open("Something went wrong", "Okay.") && console.error(reason));
+      .then<void, void>((_userCredential: UserCredential): void => matSnackBar.open("Sign-in successful.", "Okay") && void(0))
+      .catch<void>((reason: any): void => matSnackBar.open("Something went wrong.", "Okay") && console.error(reason));
     this
       .statusSubject = new BehaviorSubject<SignInFormStatus>("unsent");
     this
@@ -69,7 +69,7 @@ export class SignInCardComponent {
       .submit = async (): Promise<void> => this
       .formGroup
       .value
-      .name ? (async (name: string): Promise<void> => (async (_void: void): Promise<void> => await createUserWithPasskey(auth, functions, name).then<void, void>((_userCredential: UserCredential): void => matSnackBar.open("Registration successful.", "Okay.") && void(0)).catch<void>((reason: any): void => matSnackBar.open("Something went wrong", "Okay.") && console.error(reason)))(await setDoc(doc(firestore, "/profiles/" + (await firstValueFrom(authenticationService.userObservable)).uid) as DocumentReference<ProfileDocument>, {
+      .name ? (async (name: string): Promise<void> => (async (_void: void): Promise<void> => await createUserWithPasskey(auth, functions, name).then<void, void>((_userCredential: UserCredential): void => matSnackBar.open("Sign-in successful.", "Okay") && void(0)).catch<void>((reason: any): void => matSnackBar.open("Something went wrong.", "Okay") && console.error(reason)))(await setDoc(doc(firestore, "/profiles/" + (await firstValueFrom(authenticationService.userObservable)).uid) as DocumentReference<ProfileDocument>, {
         name: name,
       }).catch<void>((reason: any): void => console.error(reason))))(this.formGroup.value.name) : void(0);
   }

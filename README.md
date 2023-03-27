@@ -9,9 +9,11 @@ See the demo online at https://ngx-firebase-web-authn.web.app.
 ```ts
 createUserWithPasskey: (auth: Auth, functions: Functions, name: string) => Promise<UserCredential>;
 signInWithPasskey: (auth: Auth, functions: Functions) => Promise<UserCredential>;
-confirmUserWithPasskey: (auth: Auth, functions: Functions) => Promise<void>;
+verifyUserWithPasskey: (auth: Auth, functions: Functions) => Promise<void>;
 ```
-`createUserWithPasskey` and `signInWithPasskey` should only be used when a user is not signed in or is signed in anonymously. Users are signed in anonymously first, which may make data disappear before the passkey window appears and is completed.
+Because users don't change their `uid` between starting and completing creating an account, your app should listen to `onIdTokenChanged` rather than `onAuthStateChanged`.
+
+`verifyUserWithPasskey` resolves if the user was re-verified, but your backend logic should depend on the `lastVerified` field in the user's document in the `ngxFirebaseWebAuthnUsers` collection which is updated automatically.
 
 Also note that `name` is not stored except in the passkey, and can be changed by the user without the app being able to know. Once users are signed in, your app should create a document in a separate `users`/`profiles` collection to store user information.
 

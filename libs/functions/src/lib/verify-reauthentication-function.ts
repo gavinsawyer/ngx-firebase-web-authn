@@ -1,11 +1,11 @@
-import { VerifiedAuthenticationResponse, verifyAuthenticationResponse } from "@simplewebauthn/server";
-import { AuthenticationResponseJSON }                                   from "@simplewebauthn/typescript-types";
-import { getAuth }                                                      from "firebase-admin/auth";
-import { DocumentReference, FieldValue, getFirestore }                  from "firebase-admin/firestore";
-import { HttpsFunction, runWith }                                       from "firebase-functions";
-import { FunctionResponseSuccessful }                                   from "./function-response-successful";
-import { FunctionResponseUnsuccessful }                                 from "./function-response-unsuccessful";
-import { UserDocument }                                                 from "./user-document";
+import { VerifiedAuthenticationResponse, verifyAuthenticationResponse }                   from "@simplewebauthn/server";
+import { AuthenticationResponseJSON }                                                     from "@simplewebauthn/typescript-types";
+import { Auth, getAuth }                                                                  from "firebase-admin/auth";
+import { DocumentReference, FieldValue, Firestore, getFirestore, Timestamp, WriteResult } from "firebase-admin/firestore";
+import { HttpsFunction, runWith }                                                         from "firebase-functions";
+import { FunctionResponseSuccessful }                                                     from "./function-response-successful";
+import { FunctionResponseUnsuccessful }                                                   from "./function-response-unsuccessful";
+import { UserDocument }                                                                   from "./user-document";
 
 
 interface VerifyReauthenticationFunctionResponseSuccessful extends FunctionResponseSuccessful {}
@@ -22,13 +22,14 @@ export const ngxFirebaseWebAuthnVerifyReauthentication: HttpsFunction = runWith(
   enforceAppCheck: true,
 })
   .https
-  .onCall(async (verifyReauthenticationFunctionRequest: VerifyReauthenticationFunctionRequest, callableContext): Promise<VerifyReauthenticationFunctionResponse> => callableContext.auth && callableContext.auth.uid === verifyReauthenticationFunctionRequest.authenticationResponse.response.userHandle ? (async (auth, firestore): Promise<VerifyReauthenticationFunctionResponse> => (async (userDocument: UserDocument | undefined): Promise<VerifyReauthenticationFunctionResponse> => userDocument ? (async () => userDocument.credentialId && userDocument.credentialPublicKey ? (async () => userDocument.challenge ? (async (verifiedAuthenticationResponse: VerifiedAuthenticationResponse): Promise<VerifyReauthenticationFunctionResponse> => verifiedAuthenticationResponse.verified ? (async (_writeResult): Promise<VerifyReauthenticationFunctionResponse> => ({
+  .onCall(async (verifyReauthenticationFunctionRequest: VerifyReauthenticationFunctionRequest, callableContext): Promise<VerifyReauthenticationFunctionResponse> => callableContext.auth && callableContext.auth.uid === verifyReauthenticationFunctionRequest.authenticationResponse.response.userHandle ? (async (auth: Auth, firestore: Firestore): Promise<VerifyReauthenticationFunctionResponse> => (async (userDocument: UserDocument | undefined): Promise<VerifyReauthenticationFunctionResponse> => userDocument ? (async () => userDocument.credentialId && userDocument.credentialPublicKey ? (async () => userDocument.challenge ? (async (verifiedAuthenticationResponse: VerifiedAuthenticationResponse): Promise<VerifyReauthenticationFunctionResponse> => verifiedAuthenticationResponse.verified ? (async (_writeResult: WriteResult): Promise<VerifyReauthenticationFunctionResponse> => ({
     success: true,
   }))(await (firestore.collection("ngxFirebaseWebAuthnUsers").doc(callableContext.auth!.uid) as DocumentReference<UserDocument>).update({
     challenge: FieldValue.delete(),
     credentialCounter: verifiedAuthenticationResponse.authenticationInfo.newCounter,
     credentialId: verifiedAuthenticationResponse.authenticationInfo.credentialID,
-  })) : ((_writeResult): VerifyReauthenticationFunctionResponse => ({
+    lastVerified: Timestamp.fromDate(new Date()),
+  })) : ((_writeResult: WriteResult): VerifyReauthenticationFunctionResponse => ({
     success: false,
     message: "Reauthentication response not verified.",
   }))(await (firestore.collection("ngxFirebaseWebAuthnUsers").doc(callableContext.auth!.uid) as DocumentReference<UserDocument>).update({
@@ -47,7 +48,7 @@ export const ngxFirebaseWebAuthnVerifyReauthentication: HttpsFunction = runWith(
   })) : {
     success: false,
     message: "Please create a reauthentication challenge first.",
-  })() : ((_writeResult): VerifyReauthenticationFunctionResponse => ({
+  })() : ((_writeResult: WriteResult): VerifyReauthenticationFunctionResponse => ({
     success: false,
     message: "A passkey doesn't exist for this user.",
   }))(await firestore.collection("ngxFirebaseWebAuthnUsers").doc(callableContext.auth!.uid).delete()))() : {
