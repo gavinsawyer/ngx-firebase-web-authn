@@ -26,8 +26,6 @@ export const ngxFirebaseWebAuthnVerifyReauthentication: HttpsFunction = runWith(
     success: true,
   }))(await (firestore.collection("ngxFirebaseWebAuthnUsers").doc(callableContext.auth!.uid) as DocumentReference<UserDocument>).update({
     challenge: FieldValue.delete(),
-    credentialCounter: verifiedAuthenticationResponse.authenticationInfo.newCounter,
-    credentialId: verifiedAuthenticationResponse.authenticationInfo.credentialID,
     lastVerified: Timestamp.fromDate(new Date()),
   })) : ((_writeResult: WriteResult): VerifyReauthenticationFunctionResponse => ({
     success: false,
