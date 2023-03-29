@@ -2,9 +2,11 @@
 An Angular Firebase extension for authentication with WebAuthn passkeys.
 
 See the demo online at https://ngx-firebase-web-authn.web.app.
-#### Exported methods
+#### Usage
 ```ts
-createUserWithPasskey: (auth: Auth, functions: Functions, displayName: string) => Promise<UserCredential>;
+import { createUserWithPasskey, signInWithPasskey, verifyUserWithPasskey } from "@ngx-firebase-web-authn/browser";
+
+createUserWithPasskey: (auth: Auth, functions: Functions, name: string) => Promise<UserCredential>;
 signInWithPasskey: (auth: Auth, functions: Functions) => Promise<UserCredential>;
 verifyUserWithPasskey: (auth: Auth, functions: Functions) => Promise<void>;
 ```
@@ -20,7 +22,6 @@ import { CommonModule }                   from "@angular/common";
 import { Component }                      from "@angular/core";
 import { Auth, UserCredential }           from "@angular/fire/auth";
 import { Functions }                      from "@angular/fire/functions";
-
 import { createUserWithPasskey }          from "@ngx-firebase-web-authn/browser";
 import { createUserWithEmailAndPassword } from "@angular/fire/auth";
 
@@ -36,7 +37,7 @@ export class SignUpComponent {
     this
       .createUserWithPasskey = (name: string): Promise<void> => createUserWithPasskey(auth, functions, name)
       .then<void>((_userCredential: UserCredential): void => void(0));
-    
+
     // AngularFire usage
     this
       .createUserWithEmailAndPassword = (email: string, password: string): Promise<void> => createUserWithEmailAndPassword(auth, email, password)
@@ -48,4 +49,4 @@ export class SignUpComponent {
 
 }
 ```
-Add `.catch<void>((reason: any): void => console.error(reason))` to these methods for an error code that may point to one of your Firebase Functions. If the user cancels `createUserWithPasskey`, the method throws `"ngxFirebaseWebAuthn/createUserWithPasskey: Cancelled by user."`, for example.
+Add `.catch<void>((reason: any): void => console.error(reason))` to these methods for an error code. If the user cancels `createUserWithPasskey`, the method throws `"ngxFirebaseWebAuthn/createUserWithPasskey: Cancelled by user."`, for example.

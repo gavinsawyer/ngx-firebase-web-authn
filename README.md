@@ -5,8 +5,10 @@ An Angular Firebase extension for authentication with WebAuthn passkeys.
 See the demo online at https://ngx-firebase-web-authn.web.app.
 ### [@ngx-firebase-web-authn/browser](libs/browser)
 `% npm install @ngx-firebase-web-authn/browser --save`
-#### Exported methods
+#### Usage
 ```ts
+import { createUserWithPasskey, signInWithPasskey, verifyUserWithPasskey } from "@ngx-firebase-web-authn/browser";
+
 createUserWithPasskey: (auth: Auth, functions: Functions, name: string) => Promise<UserCredential>;
 signInWithPasskey: (auth: Auth, functions: Functions) => Promise<UserCredential>;
 verifyUserWithPasskey: (auth: Auth, functions: Functions) => Promise<void>;
@@ -23,7 +25,6 @@ import { CommonModule }                   from "@angular/common";
 import { Component }                      from "@angular/core";
 import { Auth, UserCredential }           from "@angular/fire/auth";
 import { Functions }                      from "@angular/fire/functions";
-
 import { createUserWithPasskey }          from "@ngx-firebase-web-authn/browser";
 import { createUserWithEmailAndPassword } from "@angular/fire/auth";
 
@@ -51,13 +52,13 @@ export class SignUpComponent {
 
 }
 ```
-Add `.catch<void>((reason: any): void => console.error(reason))` to these methods for an error code that may point to one of your Firebase Functions. If the user cancels `createUserWithPasskey`, the method throws `"ngxFirebaseWebAuthn/createUserWithPasskey: Cancelled by user."`, for example.
+Add `.catch<void>((reason: any): void => console.error(reason))` to these methods for an error code. If the user cancels `createUserWithPasskey`, the method throws `"ngxFirebaseWebAuthn/createUserWithPasskey: Cancelled by user."`, for example.
 ### [@ngx-firebase-web-authn/functions](libs/functions)
 This package contains a Firebase Function used to facilitate registering, authenticating, reauthenticating WebAuthn passkeys, and clearing challenges if the user cancels the process.
 
 Public keys are stored in the `ngxFirebaseWebAuthnUsers` collection in Firestore. Setup doesn't require you to modify any Firestore rules. Your app should use a separate `users`/`profiles` collection to store user information.
-### Deploying functions
-From your functions package root, run:
+### Deployment
+From your Firebase Functions package root, run:
 
 `% npm install @ngx-firebase-web-authn/functions --save`
 
@@ -72,10 +73,10 @@ export { ngxFirebaseWebAuthn } from '@ngx-firebase-web-authn/functions';
 
 // Other functions...
 ```
-Deploy your firebase functions.
+Deploy your Firebase Functions:
 
 `% firebase deploy --only functions`
-### Using functions
+### Usage
 For the browser to reach ngxFirebaseWebAuthn, modify your `firebase.json` to include a rewrite on each app where you'd like to use passkeys.
 ```json
 {

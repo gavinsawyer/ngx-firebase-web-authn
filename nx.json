@@ -9,7 +9,7 @@
       "runner": "@nrwl/nx-cloud",
       "options": {
         "cacheableOperations": ["browser", "server", "build"],
-        "accessToken": "${NX_CLOUD_AUTH_TOKEN}"
+        "accessToken": "${NX_CLOUD_ACCESS_TOKEN}"
       }
     }
   },

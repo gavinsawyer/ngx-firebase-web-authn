@@ -6,8 +6,8 @@ See the demo online at https://ngx-firebase-web-authn.web.app.
 This package contains a Firebase Function used to facilitate registering, authenticating, reauthenticating WebAuthn passkeys, and clearing challenges if the user cancels the process.
 
 Public keys are stored in the `ngxFirebaseWebAuthnUsers` collection in Firestore. Setup doesn't require you to modify any Firestore rules. Your app should use a separate `users`/`profiles` collection to store user information.
-### Deploying functions
-From your functions package root, run:
+### Deployment
+From your Firebase Functions package root, run:
 
 `% npm install @ngx-firebase-web-authn/functions --save`
 
@@ -22,10 +22,10 @@ export { ngxFirebaseWebAuthn } from '@ngx-firebase-web-authn/functions';
 
 // Other functions...
 ```
-Deploy your firebase functions.
+Deploy your Firebase Functions:
 
 `% firebase deploy --only functions`
-### Using functions
+### Usage
 For the browser to reach ngxFirebaseWebAuthn, modify your `firebase.json` to include a rewrite on each app where you'd like to use passkeys.
 ```json
 {

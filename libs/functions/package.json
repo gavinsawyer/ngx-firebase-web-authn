@@ -1,6 +1,6 @@
 {
   "name": "@ngx-firebase-web-authn/functions",
-  "version": "15.4.0",
+  "version": "15.4.1",
   "author": {
     "name": "Gavin Sawyer",
     "email": "hello@gavinsawyer.dev",

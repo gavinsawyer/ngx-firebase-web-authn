@@ -69,7 +69,7 @@ export class SignInCardComponent {
       .submit = async (): Promise<void> => this
       .formGroup
       .value
-      .name ? (async (name: string): Promise<void> => (async (_void: void): Promise<void> => await createUserWithPasskey(auth, functions, name).then<void, void>((_userCredential: UserCredential): void => matSnackBar.open("Sign-in successful.", "Okay") && void(0)).catch<void>((reason: any): void => matSnackBar.open("Something went wrong.", "Okay") && console.error(reason)))(await setDoc(doc(firestore, "/profiles/" + (await firstValueFrom(authenticationService.userObservable)).uid) as DocumentReference<ProfileDocument>, {
+      .name ? (async (name: string): Promise<void> => (async (_void: void): Promise<void> => await createUserWithPasskey(auth, functions, name).then<void, void>((_userCredential: UserCredential): void => matSnackBar.open("Sign-up successful.", "Okay") && void(0)).catch<void>((reason: any): void => matSnackBar.open("Something went wrong.", "Okay") && console.error(reason)))(await setDoc(doc(firestore, "/profiles/" + (await firstValueFrom(authenticationService.userObservable)).uid) as DocumentReference<ProfileDocument>, {
         name: name,
       }).catch<void>((reason: any): void => console.error(reason))))(this.formGroup.value.name) : void(0);
   }
