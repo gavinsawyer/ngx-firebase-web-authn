@@ -27,32 +27,8 @@
     ],
     "rewrites": [
       {
-        "source": "/ngxFirebaseWebAuthn/clearChallenge",
-        "function": "ngxFirebaseWebAuthnClearChallenge"
-      },
-      {
-        "source": "/ngxFirebaseWebAuthn/createAuthenticationChallenge",
-        "function": "ngxFirebaseWebAuthnCreateAuthenticationChallenge"
-      },
-      {
-        "source": "/ngxFirebaseWebAuthn/createReauthenticationChallenge",
-        "function": "ngxFirebaseWebAuthnCreateReauthenticationChallenge"
-      },
-      {
-        "source": "/ngxFirebaseWebAuthn/createRegistrationChallenge",
-        "function": "ngxFirebaseWebAuthnCreateRegistrationChallenge"
-      },
-      {
-        "source": "/ngxFirebaseWebAuthn/verifyAuthentication",
-        "function": "ngxFirebaseWebAuthnVerifyAuthentication"
-      },
-      {
-        "source": "/ngxFirebaseWebAuthn/verifyReauthentication",
-        "function": "ngxFirebaseWebAuthnVerifyReauthentication"
-      },
-      {
-        "source": "/ngxFirebaseWebAuthn/verifyRegistration",
-        "function": "ngxFirebaseWebAuthnVerifyRegistration"
+        "source": "/ngxFirebaseWebAuthn",
+        "function": "ngxFirebaseWebAuthn"
       },
       {
         "source": "**",

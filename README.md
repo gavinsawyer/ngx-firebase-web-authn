@@ -53,22 +53,22 @@ export class SignUpComponent {
 ```
 Add `.catch<void>((reason: any): void => console.error(reason))` to these methods for an error code that may point to one of your Firebase Functions. If the user cancels `createUserWithPasskey`, the method throws `"ngxFirebaseWebAuthn/createUserWithPasskey: Cancelled by user."`, for example.
 ### [@ngx-firebase-web-authn/functions](libs/functions)
-This package contains six Firebase Functions used to facilitate registering, authenticating, and reauthenticating WebAuthn passkeys. An additional function clears challenges if the user cancels the process.
+This package contains a Firebase Function used to facilitate registering, authenticating, reauthenticating WebAuthn passkeys, and clearing challenges if the user cancels the process.
 
-Functions store users' public keys in the `ngxFirebaseWebAuthnUsers` collection in Firestore. Setup doesn't require you to modify any Firestore rules. Your app should use a separate `users`/`profiles` collection to store user information.
+Public keys are stored in the `ngxFirebaseWebAuthnUsers` collection in Firestore. Setup doesn't require you to modify any Firestore rules. Your app should use a separate `users`/`profiles` collection to store user information.
 ### Deploying functions
 From your functions package root, run:
 
 `% npm install @ngx-firebase-web-authn/functions --save`
 
-Re-export this package from your `functions/index.ts` file.
+Re-export the function from your `functions/index.ts` file.
 ```ts
 import { initializeApp } from 'firebase-admin/app';
 
 
 initializeApp();
 
-export * from '@ngx-firebase-web-authn/functions'
+export { ngxFirebaseWebAuthn } from '@ngx-firebase-web-authn/functions';
 
 // Other functions...
 ```
@@ -76,7 +76,7 @@ Deploy your firebase functions.
 
 `% firebase deploy --only functions`
 ### Using functions
-For the browser to reach your functions, modify your `firebase.json` to add the following `rewrites` to the `hosting` object of each app where you'd like to use ngxFirebaseWebAuthn.
+For the browser to reach ngxFirebaseWebAuthn, modify your `firebase.json` to include a rewrite on each app where you'd like to use passkeys.
 ```json
 {
   "hosting": [
@@ -84,32 +84,8 @@ For the browser to reach your functions, modify your `firebase.json` to add the 
       "target": "...",
       "rewrites": [
         {
-          "source": "/ngxFirebaseWebAuthn/clearChallenge",
-          "function": "ngxFirebaseWebAuthnClearChallenge"
-        },
-        {
-          "source": "/ngxFirebaseWebAuthn/createAuthenticationChallenge",
-          "function": "ngxFirebaseWebAuthnCreateAuthenticationChallenge"
-        },
-        {
-          "source": "/ngxFirebaseWebAuthn/createReauthenticationChallenge",
-          "function": "ngxFirebaseWebAuthnCreateReauthenticationChallenge"
-        },
-        {
-          "source": "/ngxFirebaseWebAuthn/createRegistrationChallenge",
-          "function": "ngxFirebaseWebAuthnCreateRegistrationChallenge"
-        },
-        {
-          "source": "/ngxFirebaseWebAuthn/verifyAuthentication",
-          "function": "ngxFirebaseWebAuthnVerifyAuthentication"
-        },
-        {
-          "source": "/ngxFirebaseWebAuthn/verifyReauthentication",
-          "function": "ngxFirebaseWebAuthnVerifyReauthentication"
-        },
-        {
-          "source": "/ngxFirebaseWebAuthn/verifyRegistration",
-          "function": "ngxFirebaseWebAuthnVerifyRegistration"
+          "source": "/ngxFirebaseWebAuthn",
+          "function": "ngxFirebaseWebAuthn"
         }
       ]
     }
