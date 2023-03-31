@@ -5,7 +5,8 @@ See the demo online at https://ngx-firebase-web-authn.web.app.
 #### Usage
 ```ts
 import { createUserWithPasskey, signInWithPasskey, verifyUserWithPasskey } from "@ngx-firebase-web-authn/browser";
-
+```
+```ts
 createUserWithPasskey: (auth: Auth, functions: Functions, name: string) => Promise<UserCredential>;
 signInWithPasskey: (auth: Auth, functions: Functions) => Promise<UserCredential>;
 verifyUserWithPasskey: (auth: Auth, functions: Functions) => Promise<UserCredential>;
@@ -18,34 +19,43 @@ Also note that `name` is not stored except in the passkey, and can be changed by
 
 Designed to be used just like native Firebase Authentication providers:
 ```ts
-import { CommonModule }                   from "@angular/common";
-import { Component }                      from "@angular/core";
-import { Auth, UserCredential }           from "@angular/fire/auth";
+import { Auth }                           from "@angular/fire/auth";
 import { Functions }                      from "@angular/fire/functions";
-import { createUserWithPasskey }          from "@ngx-firebase-web-authn/browser";
 import { createUserWithEmailAndPassword } from "@angular/fire/auth";
-
-
-@Component()
+import { createUserWithPasskey }          from "@ngx-firebase-web-authn/browser";
+```
+```ts
 export class SignUpComponent {
 
   constructor(
     private readonly auth: Auth,
     private readonly functions: Functions,
   ) {
-    // ngxFirebaseWebAuthn usage
-    this
-      .createUserWithPasskey = (name: string): Promise<void> => createUserWithPasskey(auth, functions, name);
-
     // AngularFire usage
     this
-      .createUserWithEmailAndPassword = (email: string, password: string): Promise<void> => createUserWithEmailAndPassword(auth, email, password);
+      .createUserWithEmailAndPassword = (email: string, password: string): Promise<void> => createUserWithEmailAndPassword(auth, email, password)
+      .then((): void => void(0));
+  
+    // ngxFirebaseWebAuthn usage
+    this
+      .createUserWithPasskey = (name: string): Promise<void> => createUserWithPasskey(auth, functions, name)
+      .then((): void => void(0));
+
   }
 
-  public readonly createUserWithPasskey: (name: string) => Promise<void>;
   public readonly createUserWithEmailAndPassword: (email: string, password: string) => Promise<void>;
+  public readonly createUserWithPasskey: (name: string) => Promise<void>;
 
 }
 ```
-Add `.catch((err: NgxFirebaseWebAuthnError): void => console.error(err))` to these methods for a detailed error object with a `code`, `message`, and `operation`. Errors from ngxFirebaseWebAuthn are autocompleted in the IDE, but may also return a `code` and `message` from firebase-admin usage in the Cloud Function.
-
+Add `.catch((err: NgxFirebaseWebAuthnError): void => console.error(err))` to these methods for a detailed error object with a `code`, `message`, and `operation`:
+```ts
+import { NgxFirebaseWebAuthnError } from "@ngx-firebase-web-authn/browser";
+```
+```ts
+class NgxFirebaseWebAuthnError extends Error {
+  code: `ngxFirebaseWebAuthn/${FirebaseError["code"] | "missing-auth" | "missing-user-doc" | "no-op" | "not-verified" | "user-doc-missing-challenge-field" | "user-doc-missing-passkey-fields" | "cancelled" | "invalid"}`;
+  message: FirebaseError["message"] | "No user is signed in." | "No user document was found in Firestore." | "No operation is needed." | "User not verified." | "User doc is missing challenge field from prior operation." | "User doc is missing passkey fields from prior operation.";
+  operation: "clear challenge" | "create authentication challenge" | "create reauthentication challenge" | "create registration challenge" | "verify authentication" | "verify reauthentication" | "verify registration";
+}
+```

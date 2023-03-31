@@ -20,7 +20,7 @@ export class NgxFirebaseWebAuthnError extends Error {
       .operation;
   }
 
-  public readonly code: `${"ngxFirebaseWebAuthn"}/${NgxFirebaseWebAuthnErrorOptions["code"]}`;
+  public readonly code: `ngxFirebaseWebAuthn/${NgxFirebaseWebAuthnErrorOptions["code"]}`;
   public override readonly message!: NgxFirebaseWebAuthnErrorOptions["message"];
   public readonly operation: NgxFirebaseWebAuthnErrorOptions["operation"];
 
