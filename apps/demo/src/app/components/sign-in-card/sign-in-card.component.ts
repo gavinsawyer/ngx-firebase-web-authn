@@ -1,19 +1,19 @@
-import { CommonModule }                                from "@angular/common";
-import { Component }                                   from "@angular/core";
-import { Auth, UserCredential }                        from "@angular/fire/auth";
-import { doc, DocumentReference, Firestore, setDoc }   from "@angular/fire/firestore";
-import { Functions }                                   from "@angular/fire/functions";
-import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
-import { MatButtonModule }                             from "@angular/material/button";
-import { MatCardModule }                               from "@angular/material/card";
-import { MatFormFieldModule }                          from "@angular/material/form-field";
-import { MatIconModule }                               from "@angular/material/icon";
-import { MatInputModule }                              from "@angular/material/input";
-import { MatSnackBar, MatSnackBarModule }              from "@angular/material/snack-bar";
-import { createUserWithPasskey, signInWithPasskey }    from "@ngx-firebase-web-authn/browser";
-import { BehaviorSubject, firstValueFrom, Observable } from "rxjs";
-import { ProfileDocument }                             from "../../interfaces";
-import { AuthenticationService }                       from "../../services";
+import { CommonModule }                                                       from "@angular/common";
+import { Component }                                                          from "@angular/core";
+import { Auth, User }                                                         from "@angular/fire/auth";
+import { doc, DocumentReference, Firestore, setDoc }                          from "@angular/fire/firestore";
+import { Functions }                                                          from "@angular/fire/functions";
+import { FormControl, FormGroup, ReactiveFormsModule }                        from "@angular/forms";
+import { MatButtonModule }                                                    from "@angular/material/button";
+import { MatCardModule }                                                      from "@angular/material/card";
+import { MatFormFieldModule }                                                 from "@angular/material/form-field";
+import { MatIconModule }                                                      from "@angular/material/icon";
+import { MatInputModule }                                                     from "@angular/material/input";
+import { MatSnackBar, MatSnackBarModule }                                     from "@angular/material/snack-bar";
+import { createUserWithPasskey, NgxFirebaseWebAuthnError, signInWithPasskey } from "@ngx-firebase-web-authn/browser";
+import { BehaviorSubject, firstValueFrom, Observable }                        from "rxjs";
+import { ProfileDocument }                                                    from "../../interfaces";
+import { AuthenticationService }                                              from "../../services";
 
 
 interface SignInForm {
@@ -57,8 +57,10 @@ export class SignInCardComponent {
       });
     this
       .signInWithPasskey = (): Promise<void> => signInWithPasskey(auth, functions)
-      .then<void, void>((_userCredential: UserCredential): void => matSnackBar.open("Sign-in successful.", "Okay") && void(0))
-      .catch<void>((reason: any): void => matSnackBar.open("Something went wrong.", "Okay") && console.error(reason));
+      .then<void>((): void => matSnackBar.open("Sign-in successful.", "Okay") && void(0))
+      .catch<never>((ngxFirebaseWebAuthnError: NgxFirebaseWebAuthnError): never => matSnackBar.open(ngxFirebaseWebAuthnError.message, "Okay") && ((): never => {
+        throw ngxFirebaseWebAuthnError;
+      })());
     this
       .statusSubject = new BehaviorSubject<SignInFormStatus>("unsent");
     this
@@ -69,9 +71,12 @@ export class SignInCardComponent {
       .submit = async (): Promise<void> => this
       .formGroup
       .value
-      .name ? (async (name: string): Promise<void> => (async (_void: void): Promise<void> => await createUserWithPasskey(auth, functions, name).then<void, void>((_userCredential: UserCredential): void => matSnackBar.open("Sign-up successful.", "Okay") && void(0)).catch<void>((reason: any): void => matSnackBar.open("Something went wrong.", "Okay") && console.error(reason)))(await setDoc(doc(firestore, "/profiles/" + (await firstValueFrom(authenticationService.userObservable)).uid) as DocumentReference<ProfileDocument>, {
+      .name ? ((name: string): Promise<void> => firstValueFrom(authenticationService.userObservable)
+      .then<void>((user: User): Promise<void> => setDoc(doc(firestore, "/profiles/" + user.uid) as DocumentReference<ProfileDocument>, {
         name: name,
-      }).catch<void>((reason: any): void => console.error(reason))))(this.formGroup.value.name) : void(0);
+      }).then<void>((): Promise<void> => createUserWithPasskey(auth, functions, name).then<void>((): void => matSnackBar.open("Sign-up successful.", "Okay") && void(0)).catch<never>((ngxFirebaseWebAuthnError: NgxFirebaseWebAuthnError): never => matSnackBar.open(ngxFirebaseWebAuthnError.message, "Okay") && ((): never => {
+        throw ngxFirebaseWebAuthnError;
+      })()))))(this.formGroup.value.name) : void(0);
   }
 
   private readonly statusSubject: BehaviorSubject<SignInFormStatus>;

@@ -1,5 +1,5 @@
 ## @ngx-firebase-web-authn/functions
-An Angular Firebase extension for authentication with WebAuthn passkeys.
+An AngularFire extension for authentication with WebAuthn passkeys.
 
 See the demo online at https://ngx-firebase-web-authn.web.app.
 

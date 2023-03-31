@@ -1,5 +1,5 @@
 ## @ngx-firebase-web-authn/browser
-An Angular Firebase extension for authentication with WebAuthn passkeys.
+An AngularFire extension for authentication with WebAuthn passkeys.
 
 See the demo online at https://ngx-firebase-web-authn.web.app.
 #### Usage
@@ -8,7 +8,7 @@ import { createUserWithPasskey, signInWithPasskey, verifyUserWithPasskey } from 
 
 createUserWithPasskey: (auth: Auth, functions: Functions, name: string) => Promise<UserCredential>;
 signInWithPasskey: (auth: Auth, functions: Functions) => Promise<UserCredential>;
-verifyUserWithPasskey: (auth: Auth, functions: Functions) => Promise<void>;
+verifyUserWithPasskey: (auth: Auth, functions: Functions) => Promise<UserCredential>;
 ```
 Because users don't change their `uid` between starting and completing creating an account, your app should listen to `onIdTokenChanged` rather than `onAuthStateChanged`.
 
@@ -35,13 +35,11 @@ export class SignUpComponent {
   ) {
     // ngxFirebaseWebAuthn usage
     this
-      .createUserWithPasskey = (name: string): Promise<void> => createUserWithPasskey(auth, functions, name)
-      .then<void>((_userCredential: UserCredential): void => void(0));
+      .createUserWithPasskey = (name: string): Promise<void> => createUserWithPasskey(auth, functions, name);
 
     // AngularFire usage
     this
-      .createUserWithEmailAndPassword = (email: string, password: string): Promise<void> => createUserWithEmailAndPassword(auth, email, password)
-      .then<void>((_userCredential: UserCredential): void => void(0));
+      .createUserWithEmailAndPassword = (email: string, password: string): Promise<void> => createUserWithEmailAndPassword(auth, email, password);
   }
 
   public readonly createUserWithPasskey: (name: string) => Promise<void>;
@@ -49,4 +47,5 @@ export class SignUpComponent {
 
 }
 ```
-Add `.catch<void>((reason: any): void => console.error(reason))` to these methods for an error code. If the user cancels `createUserWithPasskey`, the method throws `"ngxFirebaseWebAuthn/createUserWithPasskey: Cancelled by user."`, for example.
+Add `.catch((err: NgxFirebaseWebAuthnError): void => console.error(err))` to these methods for a detailed error object with a `code`, `message`, and `operation`. Errors from ngxFirebaseWebAuthn are autocompleted in the IDE, but may also return a `code` and `message` from firebase-admin usage in the Cloud Function.
+
