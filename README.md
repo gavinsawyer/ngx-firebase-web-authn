@@ -3,23 +3,25 @@
 An AngularFire extension for authentication with WebAuthn passkeys.
 
 See the demo online at https://ngx-firebase-web-authn.web.app.
-### [@ngx-firebase-web-authn/browser](libs/browser)
+## [@ngx-firebase-web-authn/browser](libs/browser)
 `% npm install @ngx-firebase-web-authn/browser --save`
-#### Usage
+### Methods
 ```ts
 import { createUserWithPasskey, signInWithPasskey, verifyUserWithPasskey } from "@ngx-firebase-web-authn/browser";
 ```
 ```ts
 createUserWithPasskey: (auth: Auth, functions: Functions, name: string) => Promise<UserCredential>;
-signInWithPasskey: (auth: Auth, functions: Functions) => Promise<UserCredential>;
-verifyUserWithPasskey: (auth: Auth, functions: Functions) => Promise<UserCredential>;
+    signInWithPasskey: (auth: Auth, functions: Functions)               => Promise<UserCredential>;
+verifyUserWithPasskey: (auth: Auth, functions: Functions)               => Promise<void>;
 ```
-Because users don't change their `uid` between starting and completing creating an account, your app should listen to `onIdTokenChanged` rather than `onAuthStateChanged`.
-
-`verifyUserWithPasskey` resolves if the user was re-verified, but your backend logic should depend on the `lastVerified` field in the user's document in the `ngxFirebaseWebAuthnUsers` collection which is updated automatically.
-
-Also note that `name` is not stored except in the passkey, and can be changed by the user without the app being able to know. Once users are signed in, your app should create a document in a separate `users`/`profiles` collection to store user information.
-
+Passkeys can be used as a secondary auth provider, as well:
+```ts
+import { linkWithPasskey, unlinkPasskey } from "@ngx-firebase-web-authn/browser";
+```
+```ts
+linkWithPasskey: (auth: Auth, functions: Functions, name: string) => Promise<UserCredential>;
+  unlinkPasskey: (auth: Auth, functions: Functions)               => Promise<void>;
+```
 Designed to be used just like native Firebase Authentication providers:
 ```ts
 import { Auth }                           from "@angular/fire/auth";
@@ -28,7 +30,7 @@ import { createUserWithEmailAndPassword } from "@angular/fire/auth";
 import { createUserWithPasskey }          from "@ngx-firebase-web-authn/browser";
 ```
 ```ts
-export class SignUpComponent {
+class SignUpComponent {
 
   constructor(
     private readonly auth: Auth,
@@ -51,7 +53,7 @@ export class SignUpComponent {
 
 }
 ```
-Add `.catch((err: NgxFirebaseWebAuthnError): void => console.error(err))` to these methods for a detailed error object with a `code`, `message`, and `operation`:
+Add `.catch((err: NgxFirebaseWebAuthnError): void => console.error(err))` to these methods for a detailed error object with a `code`, `message`, `method`, and/or `operation`. `method` is present for Firebase errors, and `operation` is present on all errors except Firebase errors from Auth methods:
 ```ts
 import { NgxFirebaseWebAuthnError } from "@ngx-firebase-web-authn/browser";
 ```
@@ -59,12 +61,17 @@ import { NgxFirebaseWebAuthnError } from "@ngx-firebase-web-authn/browser";
 class NgxFirebaseWebAuthnError extends Error {
   code: `ngxFirebaseWebAuthn/${FirebaseError["code"] | "missing-auth" | "missing-user-doc" | "no-op" | "not-verified" | "user-doc-missing-challenge-field" | "user-doc-missing-passkey-fields" | "cancelled" | "invalid"}`;
   message: FirebaseError["message"] | "No user is signed in." | "No user document was found in Firestore." | "No operation is needed." | "User not verified." | "User doc is missing challenge field from prior operation." | "User doc is missing passkey fields from prior operation.";
-  operation: "clear challenge" | "create authentication challenge" | "create reauthentication challenge" | "create registration challenge" | "verify authentication" | "verify reauthentication" | "verify registration";
+  method?: "httpsCallableFromURL" | "signInAnonymously" | "signInWithCustomToken";
+  operation?: "clear challenge" | "clear user doc" | "create authentication challenge" | "create reauthentication challenge" | "create registration challenge" | "verify authentication" | "verify reauthentication" | "verify registration";
 }
 ```
-
-### [@ngx-firebase-web-authn/functions](libs/functions)
-This package contains a Firebase Function used to facilitate registering, authenticating, reauthenticating WebAuthn passkeys, and clearing challenges if the user cancels the process.
+### Caveats
+- Your backend security logic should depend on the `lastVerified` field in the user's document in the `ngxFirebaseWebAuthnUsers` collection which is updated automatically on sign-in and verification.
+- The `name` parameter is not stored except in the passkey and can be changed by the user without the app being able to know. Once users are signed in, your app should create a document in a separate `users`/`profiles` collection to store user information.
+- An anonymous user linked with a passkey is the same as a user created with `createUserWithPasskey`, and is marked by Firebase as having no provider.
+- Because users don't change their `uid` between starting and completing creating an account, your app should listen to `onIdTokenChanged` rather than `onAuthStateChanged`.
+## [@ngx-firebase-web-authn/functions](libs/functions)
+This package contains a Firebase Function used to facilitate registering, authenticating, reauthenticating WebAuthn passkeys, and clearing data if the user cancels the process or unlinks a passkey.
 
 Public keys are stored in the `ngxFirebaseWebAuthnUsers` collection in Firestore. Setup doesn't require you to modify any Firestore rules. Your app should use a separate `users`/`profiles` collection to store user information.
 ### Deployment
@@ -104,4 +111,5 @@ For the browser to reach ngxFirebaseWebAuthn, modify your `firebase.json` to inc
 }
 ```
 ### Google Cloud setup
-Assign the Default Compute Service Account the `Service Account Token Creator` role in [GCP IAM Service accounts](https://console.cloud.google.com/iam-admin/serviceaccounts). This is required for all custom authentication patterns with Firebase.
+- Enable the Anonymous authentication provider in Firebase if you are not using it already.
+- Assign the Default Compute Service Account the `Service Account Token Creator` role in [GCP IAM Service accounts](https://console.cloud.google.com/iam-admin/serviceaccounts). This is required for all custom authentication patterns with Firebase.

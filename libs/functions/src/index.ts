@@ -18,6 +18,17 @@ interface ClearChallengeFunctionResponseUnsuccessful extends UnknownFunctionResp
   "message": FirebaseError["message"] | "No user is signed in." | "No user document was found in Firestore." | "No operation is needed.",
   "operation": "clear challenge",
 }
+interface ClearUserDocFunctionRequest extends UnknownFunctionRequest {
+  "operation": "clear user doc",
+}
+interface ClearUserDocFunctionResponseSuccessful extends UnknownFunctionResponseSuccessful {
+  "operation": "clear user doc",
+}
+interface ClearUserDocFunctionResponseUnsuccessful extends UnknownFunctionResponseUnsuccessful {
+  "code": FirebaseError["code"] | "missing-auth" | "no-op",
+  "message": FirebaseError["message"] | "No user is signed in." | "No operation is needed.",
+  "operation": "clear user doc",
+}
 interface CreateAuthenticationChallengeFunctionRequest extends UnknownFunctionRequest {
   "operation": "create authentication challenge",
 }
@@ -56,10 +67,10 @@ interface CreateRegistrationChallengeFunctionResponseUnsuccessful extends Unknow
   "operation": "create registration challenge",
 }
 interface UnknownFunctionRequest {
-  "operation": "clear challenge" | "create authentication challenge" | "create reauthentication challenge" | "create registration challenge" | "verify authentication" | "verify reauthentication" | "verify registration",
+  "operation": "clear challenge" | "clear user doc" | "create authentication challenge" | "create reauthentication challenge" | "create registration challenge" | "verify authentication" | "verify reauthentication" | "verify registration",
 }
 interface UnknownFunctionResponse {
-  "operation": "clear challenge" | "create authentication challenge" | "create reauthentication challenge" | "create registration challenge" | "verify authentication" | "verify reauthentication" | "verify registration",
+  "operation": "clear challenge" | "clear user doc" | "create authentication challenge" | "create reauthentication challenge" | "create registration challenge" | "verify authentication" | "verify reauthentication" | "verify registration",
   "success": boolean,
 }
 interface UnknownFunctionResponseSuccessful extends UnknownFunctionResponse {
@@ -113,6 +124,7 @@ interface VerifyRegistrationFunctionResponseUnsuccessful extends UnknownFunction
 }
 
 type ClearChallengeFunctionResponse = ClearChallengeFunctionResponseSuccessful | ClearChallengeFunctionResponseUnsuccessful;
+type ClearUserDocFunctionResponse = ClearUserDocFunctionResponseSuccessful | ClearUserDocFunctionResponseUnsuccessful;
 type CreateAuthenticationChallengeFunctionResponse = CreateAuthenticationChallengeFunctionResponseSuccessful | CreateAuthenticationChallengeFunctionResponseUnsuccessful;
 type CreateReauthenticationChallengeFunctionResponse = CreateReauthenticationChallengeFunctionResponseSuccessful | CreateReauthenticationChallengeFunctionResponseUnsuccessful;
 type CreateRegistrationChallengeFunctionResponse = CreateRegistrationChallengeFunctionResponseSuccessful | CreateRegistrationChallengeFunctionResponseUnsuccessful;
@@ -126,8 +138,8 @@ export interface UnknownFunctionResponseUnsuccessful extends UnknownFunctionResp
   "success": false,
 }
 
-export type FunctionRequest = ClearChallengeFunctionRequest | CreateAuthenticationChallengeFunctionRequest | CreateReauthenticationChallengeFunctionRequest | CreateRegistrationChallengeFunctionRequest | VerifyAuthenticationFunctionRequest | VerifyReauthenticationFunctionRequest | VerifyRegistrationFunctionRequest;
-export type FunctionResponse = ClearChallengeFunctionResponse | CreateAuthenticationChallengeFunctionResponse | CreateReauthenticationChallengeFunctionResponse | CreateRegistrationChallengeFunctionResponse | VerifyAuthenticationFunctionResponse | VerifyReauthenticationFunctionResponse | VerifyRegistrationFunctionResponse;
+export type FunctionRequest = ClearChallengeFunctionRequest | ClearUserDocFunctionRequest | CreateAuthenticationChallengeFunctionRequest | CreateReauthenticationChallengeFunctionRequest | CreateRegistrationChallengeFunctionRequest | VerifyAuthenticationFunctionRequest | VerifyReauthenticationFunctionRequest | VerifyRegistrationFunctionRequest;
+export type FunctionResponse = ClearChallengeFunctionResponse | ClearUserDocFunctionResponse | CreateAuthenticationChallengeFunctionResponse | CreateReauthenticationChallengeFunctionResponse | CreateRegistrationChallengeFunctionResponse | VerifyAuthenticationFunctionResponse | VerifyReauthenticationFunctionResponse | VerifyRegistrationFunctionResponse;
 
 export const ngxFirebaseWebAuthn: HttpsFunction = runWith({
   enforceAppCheck: true,
@@ -159,6 +171,24 @@ export const ngxFirebaseWebAuthn: HttpsFunction = runWith({
   } : {
     code: "missing-user-doc",
     message: "No user document was found in Firestore.",
+    operation: functionRequest.operation,
+    success: false,
+  })(userDocumentSnapshot.data())).catch<FunctionResponse>((firebaseError: FirebaseError): FunctionResponse => ({
+    code: firebaseError.code,
+    message: firebaseError.message,
+    operation: functionRequest.operation,
+    success: false,
+  })) : functionRequest.operation === "clear user doc" ? firestore.collection("ngxFirebaseWebAuthnUsers").doc(callableContext.auth?.uid || "").get().then<FunctionResponse>((userDocumentSnapshot: DocumentSnapshot<UserDocument>): Promise<FunctionResponse> => (async (userDocument: UserDocument | undefined): Promise<FunctionResponse> => userDocument ? firestore.collection("ngxFirebaseWebAuthnUsers").doc(callableContext.auth?.uid || "").delete().then<FunctionResponse>((): FunctionResponse => ({
+    operation: functionRequest.operation,
+    success: true,
+  })).catch<FunctionResponse>((firebaseError: FirebaseError): FunctionResponse => ({
+    code: firebaseError.code,
+    message: firebaseError.message,
+    operation: functionRequest.operation,
+    success: false,
+  })) : {
+    code: "no-op",
+    message: "No operation is needed.",
     operation: functionRequest.operation,
     success: false,
   })(userDocumentSnapshot.data())).catch<FunctionResponse>((firebaseError: FirebaseError): FunctionResponse => ({

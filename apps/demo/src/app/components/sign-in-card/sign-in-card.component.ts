@@ -72,11 +72,11 @@ export class SignInCardComponent {
       .formGroup
       .value
       .name ? ((name: string): Promise<void> => firstValueFrom(authenticationService.userObservable)
-      .then<void>((user: User): Promise<void> => setDoc(doc(firestore, "/profiles/" + user.uid) as DocumentReference<ProfileDocument>, {
+      .then<void>((user: User): Promise<void> => createUserWithPasskey(auth, functions, name).then<void>((): Promise<void> => matSnackBar.open("Sign-up successful.", "Okay") && setDoc(doc(firestore, "/profiles/" + user.uid) as DocumentReference<ProfileDocument>, {
         name: name,
-      }).then<void>((): Promise<void> => createUserWithPasskey(auth, functions, name).then<void>((): void => matSnackBar.open("Sign-up successful.", "Okay") && void(0)).catch<never>((ngxFirebaseWebAuthnError: NgxFirebaseWebAuthnError): never => matSnackBar.open(ngxFirebaseWebAuthnError.message, "Okay") && ((): never => {
+      }).then<void>((): void => void(0))).catch<never>((ngxFirebaseWebAuthnError: NgxFirebaseWebAuthnError): never => matSnackBar.open(ngxFirebaseWebAuthnError.message, "Okay") && ((): never => {
         throw ngxFirebaseWebAuthnError;
-      })()))))(this.formGroup.value.name) : void(0);
+      })())))(this.formGroup.value.name) : void(0);
   }
 
   private readonly statusSubject: BehaviorSubject<SignInFormStatus>;

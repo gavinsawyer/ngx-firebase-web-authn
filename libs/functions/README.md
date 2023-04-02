@@ -3,7 +3,7 @@ An AngularFire extension for authentication with WebAuthn passkeys.
 
 See the demo online at https://ngx-firebase-web-authn.web.app.
 
-This package contains a Firebase Function used to facilitate registering, authenticating, reauthenticating WebAuthn passkeys, and clearing challenges if the user cancels the process.
+This package contains a Firebase Function used to facilitate registering, authenticating, reauthenticating WebAuthn passkeys, and clearing data if the user cancels the process or unlinks a passkey.
 
 Public keys are stored in the `ngxFirebaseWebAuthnUsers` collection in Firestore. Setup doesn't require you to modify any Firestore rules. Your app should use a separate `users`/`profiles` collection to store user information.
 ### Deployment
@@ -43,4 +43,5 @@ For the browser to reach ngxFirebaseWebAuthn, modify your `firebase.json` to inc
 }
 ```
 ### Google Cloud setup
-Assign the Default Compute Service Account the `Service Account Token Creator` role in [GCP IAM Service accounts](https://console.cloud.google.com/iam-admin/serviceaccounts). This is required for all custom authentication patterns with Firebase.
+- Enable the Anonymous authentication provider in Firebase if you are not using it already.
+- Assign the Default Compute Service Account the `Service Account Token Creator` role in [GCP IAM Service accounts](https://console.cloud.google.com/iam-admin/serviceaccounts). This is required for all custom authentication patterns with Firebase.
