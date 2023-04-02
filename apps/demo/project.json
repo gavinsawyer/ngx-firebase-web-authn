@@ -5,14 +5,7 @@
   "sourceRoot": "apps/demo/src",
   "prefix": "demo-app",
   "targets": {
-    "prebuild": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "node git-version.js"
-      }
-    },
     "browser": {
-      "dependsOn": ["prebuild"],
       "executor": "@angular-devkit/build-angular:browser",
       "outputs": ["{options.outputPath}"],
       "options": {
@@ -66,7 +59,6 @@
       "defaultConfiguration": "production"
     },
     "server": {
-      "dependsOn": ["prebuild"],
       "executor": "@angular-devkit/build-angular:server",
       "options": {
         "outputPath": "dist/apps/demo/server",
@@ -107,7 +99,7 @@
       }
     },
     "build": {
-      "dependsOn": ["prebuild", "^browser", "^server"],
+      "dependsOn": ["^browser", "^server"],
       "executor": "@nguniversal/builders:prerender",
       "options": {
         "routesFile": "apps/demo/src/app/routes.txt"
@@ -125,7 +117,7 @@
       "defaultConfiguration": "production"
     },
     "deploy": {
-      "dependsOn": ["prebuild", "^browser", "^server"],
+      "dependsOn": ["^browser", "^server"],
       "executor": "@angular/fire:deploy",
       "options": {
         "ssr": "cloud-run",
@@ -141,21 +133,7 @@
         "outputPath": "dist/apps/demo/run"
       }
     },
-    "serve": {
-      "dependsOn": ["prebuild"],
-      "executor": "@angular-devkit/build-angular:dev-server",
-      "configurations": {
-        "production": {
-          "browserTarget": "demo:browser:production"
-        },
-        "development": {
-          "browserTarget": "demo:browser:development"
-        }
-      },
-      "defaultConfiguration": "development"
-    },
     "extract-i18n": {
-      "dependsOn": ["prebuild"],
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
         "browserTarget": "demo:browser"
