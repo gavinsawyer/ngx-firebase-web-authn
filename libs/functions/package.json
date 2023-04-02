@@ -1,6 +1,6 @@
 {
   "name": "@ngx-firebase-web-authn/functions",
-  "version": "15.7.0",
+  "version": "15.7.1",
   "homepage": "https://github.com/gavinsawyer/ngx-firebase-web-authn/tree/main/libs/functions#readme",
   "author": {
     "name": "Gavin Sawyer",
