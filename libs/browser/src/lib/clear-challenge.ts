@@ -1,4 +1,4 @@
-import { Functions, httpsCallableFromURL, HttpsCallableResult } from "@angular/fire/functions";
+import { Functions, httpsCallableFromURL, HttpsCallableResult } from "firebase/functions";
 import { FunctionRequest, FunctionResponse }                    from "@ngx-firebase-web-authn/functions";
 import { NgxFirebaseWebAuthnError }                             from "./ngx-firebase-web-authn-error";
 

@@ -1,4 +1,4 @@
-import { Auth, signInWithCustomToken, UserCredential } from "@angular/fire/auth";
+import { Auth, signInWithCustomToken, UserCredential } from "firebase/auth";
 import { FunctionResponse }                            from "@ngx-firebase-web-authn/functions";
 import { NgxFirebaseWebAuthnError }                    from "./ngx-firebase-web-authn-error";
 

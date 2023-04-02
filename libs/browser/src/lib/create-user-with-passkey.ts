@@ -1,5 +1,5 @@
-import { Auth, signInAnonymously, UserCredential } from "@angular/fire/auth";
-import { Functions }                               from "@angular/fire/functions";
+import { Auth, signInAnonymously, UserCredential } from "firebase/auth";
+import { Functions }                               from "firebase/functions";
 import { linkWithPasskey }                         from "./link-with-passkey";
 import { NgxFirebaseWebAuthnError }                from "./ngx-firebase-web-authn-error";
 

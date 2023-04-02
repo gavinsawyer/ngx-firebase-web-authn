@@ -1,5 +1,5 @@
-import { Auth }                                                 from "@angular/fire/auth";
-import { Functions, httpsCallableFromURL, HttpsCallableResult } from "@angular/fire/functions";
+import { Auth }                                                 from "firebase/auth";
+import { Functions, httpsCallableFromURL, HttpsCallableResult } from "firebase/functions";
 import { FunctionRequest, FunctionResponse }                    from "@ngx-firebase-web-authn/functions";
 import { startAuthentication }                                  from "@simplewebauthn/browser";
 import { AuthenticationResponseJSON }                           from "@simplewebauthn/typescript-types";
