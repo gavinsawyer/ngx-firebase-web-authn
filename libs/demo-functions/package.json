@@ -1,5 +1,6 @@
 {
   "name": "@ngx-firebase-web-authn/demo-functions",
+  "homepage": "https://github.com/gavinsawyer/ngx-firebase-web-authn/tree/main/libs/demo-functions#readme",
   "author": {
     "name": "Gavin Sawyer",
     "email": "hello@gavinsawyer.dev",

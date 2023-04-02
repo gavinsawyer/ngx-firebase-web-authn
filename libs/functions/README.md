@@ -1,11 +1,10 @@
 ## @ngx-firebase-web-authn/functions
-An AngularFire extension for authentication with WebAuthn passkeys.
+An unofficial AngularFire extension for authentication with WebAuthn passkeys.
 
-See the demo online at https://ngx-firebase-web-authn.web.app.
-
+### Deprecated: This project is now [FirebaseWebAuthn](https://github.com/gavinsawyer/firebase-web-authn) version 9.
 This package contains a Firebase Function used to facilitate registering, authenticating, reauthenticating WebAuthn passkeys, and clearing data if the user cancels the process or unlinks a passkey.
 
-Public keys are stored in the `ngxFirebaseWebAuthnUsers` collection in Firestore. Setup doesn't require you to modify any Firestore rules. Your app should use a separate `users`/`profiles` collection to store user information.
+Public keys are stored in the `webAuthnUsers` collection in Firestore. Setup doesn't require you to modify any Firestore rules. Your app should use a separate `users`/`profiles` collection to store user information.
 ### Deployment
 From your Firebase Functions package root, run:
 
@@ -44,4 +43,4 @@ For the browser to reach ngxFirebaseWebAuthn, modify your `firebase.json` to inc
 ```
 ### Google Cloud setup
 - Enable the Anonymous authentication provider in Firebase if you are not using it already.
-- Assign the Default Compute Service Account the `Service Account Token Creator` role in [GCP IAM Service accounts](https://console.cloud.google.com/iam-admin/serviceaccounts). This is required for all custom authentication patterns with Firebase.
+- Add the `Service Account Token Creator` role to your Firebase Functions' service account in [GCP IAM project permissions](https://console.cloud.google.com/iam-admin/iam). This is either the `Default compute service account` or the `App Engine default service account`, and can be seen under "Runtime service account" in [GCP Cloud Function configuration](https://console.cloud.google.com/functions/list) after deployment.

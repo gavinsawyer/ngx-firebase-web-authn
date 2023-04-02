@@ -1,7 +1,7 @@
 {
   "name": "ngx-firebase-web-authn",
-  "version": "15.6.1",
-  "main": "./apps/demo/src/main.ts",
+  "version": "15.7.0",
+  "homepage": "https://github.com/gavinsawyer/ngx-firebase-web-authn#readme",
   "author": {
     "name": "Gavin Sawyer",
     "email": "hello@gavinsawyer.dev",
@@ -12,6 +12,10 @@
     "deploy": "npx nx run-many --target deploy --all"
   },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gavinsawyer/ngx-firebase-web-authn.git"
+  },
   "dependencies": {
     "@angular/animations": "^15",
     "@angular/cdk": "^15",

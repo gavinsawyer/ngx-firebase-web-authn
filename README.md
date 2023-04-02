@@ -1,8 +1,7 @@
-# ngx-firebase-web-authn
-#### `AngularFire` `Firebase Authentication` `Firebase Functions` `Firestore` `SimpleWebAuthn`
-An AngularFire extension for authentication with WebAuthn passkeys.
-
-See the demo online at https://ngx-firebase-web-authn.web.app.
+# ngxFirebaseWebAuthn
+#### `Firebase Authentication` `Firebase Functions` `Firestore` `SimpleWebAuthn`
+An unofficial AngularFire extension for authentication with WebAuthn passkeys.
+### Deprecated: This project is now [FirebaseWebAuthn](https://github.com/gavinsawyer/firebase-web-authn) version 9.
 ## [@ngx-firebase-web-authn/browser](libs/browser)
 `% npm install @ngx-firebase-web-authn/browser --save`
 ### Methods
@@ -22,7 +21,7 @@ import { linkWithPasskey, unlinkPasskey } from "@ngx-firebase-web-authn/browser"
 linkWithPasskey: (auth: Auth, functions: Functions, name: string) => Promise<UserCredential>;
   unlinkPasskey: (auth: Auth, functions: Functions)               => Promise<void>;
 ```
-Designed to be used just like native Firebase Authentication providers:
+Designed to be used just like native the Firebase JavaScript API version 9:
 ```ts
 import { Auth }                           from "@angular/fire/auth";
 import { Functions }                      from "@angular/fire/functions";
@@ -66,14 +65,14 @@ class NgxFirebaseWebAuthnError extends Error {
 }
 ```
 ### Caveats
-- Your backend security logic should depend on the `lastVerified` field in the user's document in the `ngxFirebaseWebAuthnUsers` collection which is updated automatically on sign-in and verification.
+- Your backend security logic should depend on the `lastVerified` field in the user's document in the `webAuthnUsers` collection which is updated automatically on sign-in and verification.
 - The `name` parameter is not stored except in the passkey and can be changed by the user without the app being able to know. Once users are signed in, your app should create a document in a separate `users`/`profiles` collection to store user information.
 - An anonymous user linked with a passkey is the same as a user created with `createUserWithPasskey`, and is marked by Firebase as having no provider.
 - Because users don't change their `uid` between starting and completing creating an account, your app should listen to `onIdTokenChanged` rather than `onAuthStateChanged`.
 ## [@ngx-firebase-web-authn/functions](libs/functions)
 This package contains a Firebase Function used to facilitate registering, authenticating, reauthenticating WebAuthn passkeys, and clearing data if the user cancels the process or unlinks a passkey.
 
-Public keys are stored in the `ngxFirebaseWebAuthnUsers` collection in Firestore. Setup doesn't require you to modify any Firestore rules. Your app should use a separate `users`/`profiles` collection to store user information.
+Public keys are stored in the `webAuthnUsers` collection in Firestore. Setup doesn't require you to modify any Firestore rules. Your app should use a separate `users`/`profiles` collection to store user information.
 ### Deployment
 From your Firebase Functions package root, run:
 
@@ -112,4 +111,4 @@ For the browser to reach ngxFirebaseWebAuthn, modify your `firebase.json` to inc
 ```
 ### Google Cloud setup
 - Enable the Anonymous authentication provider in Firebase if you are not using it already.
-- Assign the Default Compute Service Account the `Service Account Token Creator` role in [GCP IAM Service accounts](https://console.cloud.google.com/iam-admin/serviceaccounts). This is required for all custom authentication patterns with Firebase.
+- Add the `Service Account Token Creator` role to your Firebase Functions' service account in [GCP IAM project permissions](https://console.cloud.google.com/iam-admin/iam). This is either the `Default compute service account` or the `App Engine default service account`, and can be seen under "Runtime service account" in [GCP Cloud Function configuration](https://console.cloud.google.com/functions/list) after deployment.

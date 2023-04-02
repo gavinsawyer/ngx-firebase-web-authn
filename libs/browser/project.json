@@ -24,7 +24,7 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/ngx-firebase-web-authn-browser/**/*.ts"]
+        "lintFilePatterns": ["libs/browser/**/*.ts"]
       }
     }
   },

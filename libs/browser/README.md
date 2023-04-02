@@ -1,7 +1,7 @@
 ## @ngx-firebase-web-authn/browser
-An AngularFire extension for authentication with WebAuthn passkeys.
+An unofficial AngularFire extension for authentication with WebAuthn passkeys.
 
-See the demo online at https://ngx-firebase-web-authn.web.app.
+### Deprecated: This project is now [FirebaseWebAuthn](https://github.com/gavinsawyer/firebase-web-authn) version 9.
 ### Methods
 ```ts
 import { createUserWithPasskey, signInWithPasskey, verifyUserWithPasskey } from "@ngx-firebase-web-authn/browser";
@@ -19,7 +19,7 @@ import { linkWithPasskey, unlinkPasskey } from "@ngx-firebase-web-authn/browser"
 linkWithPasskey: (auth: Auth, functions: Functions, name: string) => Promise<UserCredential>;
   unlinkPasskey: (auth: Auth, functions: Functions)               => Promise<void>;
 ```
-Designed to be used just like native Firebase Authentication providers:
+Designed to be used just like native the Firebase JavaScript API version 9:
 ```ts
 import { Auth }                           from "@angular/fire/auth";
 import { Functions }                      from "@angular/fire/functions";
@@ -63,7 +63,7 @@ class NgxFirebaseWebAuthnError extends Error {
 }
 ```
 ### Caveats
-- Your backend security logic should depend on the `lastVerified` field in the user's document in the `ngxFirebaseWebAuthnUsers` collection which is updated automatically on sign-in and verification.
+- Your backend security logic should depend on the `lastVerified` field in the user's document in the `webAuthnUsers` collection which is updated automatically on sign-in and verification.
 - The `name` parameter is not stored except in the passkey and can be changed by the user without the app being able to know. Once users are signed in, your app should create a document in a separate `users`/`profiles` collection to store user information.
 - An anonymous user linked with a passkey is the same as a user created with `createUserWithPasskey`, and is marked by Firebase as having no provider.
 - Because users don't change their `uid` between starting and completing creating an account, your app should listen to `onIdTokenChanged` rather than `onAuthStateChanged`.
